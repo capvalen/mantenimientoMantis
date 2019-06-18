@@ -13,22 +13,24 @@ if(!isset($_GET['placa'])){
 	FROM `mantenimiento` m
 	inner join tipoMantenimiento tpm on tpm.idTipoMantenimiento = m.idTipoMantenimiento
 	inner join placas pl on pl.idPlaca = m.idPlaca
-	where upper(pl.placSerie) = upper('{$_GET['placa']}') ;";
+	where upper(pl.placSerie) = upper('{$_GET['placa']}') and mantActivo=1
+	order by manFecha desc;";
 	
 	$resultado=$cadena->query($sql);
 	if($resultado->num_rows>=1){
 	$i=1;
 		while($row=$resultado->fetch_assoc()){ ?>
 			<tr>
-				<td><?= $i; ?></td>
+				<td><?php if($_COOKIE['ckPower']==1){echo "<button class='btn btn-outline-danger btn-sm border-0' onclick='borrarDescipcion({$row['idMantenimiento']})'><i class='icofont-close'></i></button>";} ?> <?= $i; ?></td>
 				<td><?= $row['manFecha']; ?></td>
+				<td><?= $row['tipmDescripcion']; ?></td>
 				<td class="text-capitalize"><?= $row['mantDescipcion']; ?></td>
 				<td><?= $row['mantKilometraje']; ?></td>
-				<td><?= $row['mantLugar']; ?></td>
-				<td><?= $row['mantResponsable']; ?></td>
+				<td class="text-capitalize"><?= $row['mantLugar']; ?></td>
+				<td class="text-capitalize"><?= $row['mantResponsable']; ?></td>
 				<td><?= $row['mantMonto']; ?></td>
 				<td><?php if(strlen($row['mantAdjunto'])>0){ ?>
-				<a href="./files/<?= $row['mantAdjunto'];?>"><i class="icofont-download-alt"></i></a>
+				<a href="./files/<?= $row['mantAdjunto'];?>" download><i class="icofont-download-alt"></i></a>
 				<?php }  ?></td>
 			</tr>
 			<?php $i++;
