@@ -8,7 +8,8 @@ ini_set('display_errors', 1);
 include 'conexion.php';
 $local='/';
 
-$sql="SELECT * from  usuario u  where usuNick = '".$_POST['user']."' and usuPass='".md5($_POST['pws'])."' and usuActivo =1;";
+$sql="SELECT * from  usuario u  where usuNick = '".$_POST['user']."' and usuPass=md5('{$_POST['pws']}') and usuActivo =1;";
+//echo $sql;
 $resultado=$cadena->query($sql);
 if( $resultado->num_rows>=1){
 	

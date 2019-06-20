@@ -134,3 +134,22 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="modalBorrarPlaca" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Borrar Registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<p>¿Está seguro que desea ésta placa?</p>
+      </div>
+      <div class="modal-footer">				
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="icofont-save"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-danger" id="btnBorrarPlaca"><i class="icofont-save"></i> Borrar</button>
+      </div>
+    </div>
+  </div>
+</div>

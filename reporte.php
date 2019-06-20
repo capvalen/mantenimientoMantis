@@ -32,7 +32,7 @@
 					<i class="icofont-newspaper"></i> Configuraciones
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-    		  <a class="dropdown-item" href="#!" id="btnAgregarSerie"><i class="icofont-id"></i> Agregar Placa</a>
+    		  <a class="dropdown-item" href="#!" id="btnAgregarSerie"><i class="icofont-id"></i> Configurar Placas</a>
 					<a class="dropdown-item" href="#!" id="btnAgregarManteniminto" ><i class="icofont-tools-alt-2"></i> Agregar Mantenimiento</a>
 					<a class="dropdown-item" href="#!" id="btnModificarUsuarios" ><i class="icofont-users-alt-1"></i> Controlar usuarios</a>
 				</div>
@@ -50,8 +50,15 @@
 </nav>
 <div class="container-fluid">
 <section>
+<div class="row">
+<div class="col-4 col-sm-3 col-lg-2  text-center">
+<img src="images/64649944_384295198856923_3228315122975899648_n.jpg" class="img-fluid"></div>
+<div class="col-8 col-sm-9">
 	<h3 class="text-center pt-3 ">Transportes y Contratistas JKM EIRL</h3>
 	<h3 class="text-center ">Control de mantenimiento</h3>
+</div>
+</div>
+	
 		<?php if(isset($_GET['placa'])){?> <h4 class="text-center pb-5">Placa: <?= $_GET['placa'];?></h4> 
 
 	<table class="table table-hover">
@@ -93,10 +100,20 @@
 				<p>Rellene la serie de la placa:</p>
 				<input type="text" class="form-control text-uppercase" id="txtPlacaNueva">
 				<p class="pError text-danger d-none"><i class="icofont-cat-alt-3"></i> <span id="errorMensaje"></span></p>
+				<button type="button" class="btn btn-outline-primary" id="btnGuardarPlacaNew"><i class="icofont-save"></i> Guardar</button>
+				
+				<table class="table table-hover">
+				<thead>
+				<tr><th>N°</th>
+				<th>Placa</th>
+				<th>@</th></tr>
+				</thead>
+				<tbody>
+				<?php include "php/listarPlacas.php"; ?>
+				</tbody>
+				</table>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" id="btnGuardarPlacaNew"><i class="icofont-save"></i> Guardar</button>
-      </div>
+      
     </div>
   </div>
 </div>
@@ -318,6 +335,19 @@ function borrarDescipcion(idDescripc){
 }
 $('#btnBorrarRegistro').click(function() { 
 	$.ajax({url: 'php/borrarRegistro.php', type: 'POST', data: { idDescripc: $.idDescripc }}).done(function(resp) { //console.log( resp=='todo ok' );
+		if($.trim(resp)=='todo ok'){
+			location.reload();
+		}
+	});
+});
+function borrarPlaca(idPlaca){
+	$.idPlaca = idPlaca;
+	$('#strPlacaBorrar').text( $(this).parent().prev().text());
+	$('#modalAddPlaca').modal('hide');
+	$('#modalBorrarPlaca').modal('show');
+}
+$('#btnBorrarPlaca').click(function() { 
+	$.ajax({url: 'php/borrarPlaca.php', type: 'POST', data: { idPlaca: $.idPlaca }}).done(function(resp) { //console.log( resp=='todo ok' );
 		if($.trim(resp)=='todo ok'){
 			location.reload();
 		}
