@@ -161,7 +161,7 @@
 				<div class="form-group row">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Kilometraje:</label>
 					<div class="col-sm-9">
-					<input type="number" class="form-control" id="txtKilometrajeMant" value="0" min="0">
+					<input type="text" class="form-control" id="txtKilometrajeMant" value="0" min="0">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -179,7 +179,7 @@
 				<div class="form-group row">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Monto:</label>
 					<div class="col-sm-9">
-					<input type="number" class="form-control" id="txtMontoMant" value="0">
+					<input type="text" class="form-control" id="txtMontoMant" value="0">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -381,6 +381,10 @@ $('#btnGuardarPersona').click(function() {
 $('#btnModificarUsuarios').click(function() {
 	$('#modalListadoPersonal').modal('show');
 });
+function updateDescipcion(idPlaca){
+	$.idPlaca = idPlaca;
+
+}
 
 
 <?php } ?>
