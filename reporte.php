@@ -534,7 +534,7 @@ $('#btnGuardarMantenimientoEdit').click(function() {
 				var formData= new FormData();
 				var archivo = $('#txtAdjuntoMantEdit')[0].files[0];
 				formData.append("archivo", archivo );
-				formData.append("placa", $('#sltPlacasEdit').selectpicker('val') );
+				formData.append("placa", $('#sltPlacasMantEdit').selectpicker('val') );
 				formData.append("idReg", resp );
 				$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false,
 					cache:false
