@@ -128,7 +128,7 @@
         </button>
       </div>
       <div class="modal-body">
-				<p>Rellene os campos básicos:</p>
+				<p>Rellene los campos básicos:</p>
 				<div class="form-group row">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Placa:</label>
 					<div class="col-sm-9">
@@ -197,6 +197,90 @@
     </div>
   </div>
 </div>
+<!-- Modal para: editar una mantenimiento -->
+<div class="modal fade" id="modalEditMantenimiento" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Mantenimiento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<p>Rellene los campos básicos:</p>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Placa:</label>
+					<div class="col-sm-9">
+					<select class="selectpicker" data-live-search="true" id="sltPlacasMantEdit" title="&#xed11; Placas disponibles" disabled>
+						<?php include 'php/optPlacas.php'; ?>
+					</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Fecha:</label>
+					<div class="col-sm-9">
+					<input type="date" class="form-control" id="txtFechaMantEdit">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Tipo mantenimiento:</label>
+					<div class="col-sm-9">
+					<select class="selectpicker" data-live-search="true" id="sltTipoMantEdit" title="&#xed11; Tipo de mantenimiento">
+						<option value="1">Preventivo</option>
+						<option value="2">Correctivo</option>
+					</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Descripción:</label>
+					<div class="col-sm-9">
+					<textarea class="form-control" id="txtDescipcionMantEdit"  rows="3"></textarea>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Kilometraje:</label>
+					<div class="col-sm-9">
+					<input type="text" class="form-control" id="txtKilometrajeMantEdit" value="0" min="0">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Lugar:</label>
+					<div class="col-sm-9">
+					<input type="text" class="form-control" id="txtLugarMantEdit">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Responsable:</label>
+					<div class="col-sm-9">
+					<input type="text" class="form-control" id="txtResponsableMantEdit">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-3 col-form-label">Monto:</label>
+					<div class="col-sm-9">
+					<input type="text" class="form-control" id="txtMontoMantEdit" value="0">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="txtAdjuntoMantEdit" class="col-sm-3 col-form-label">Archivo adjunto:</label>
+					<div class="col-sm-9">
+					<div  class="hidden">
+						<span id="spanArchiAdjunto"></span> <button class="btn btn-outline-danger border-0" id="btnBorrarArchivo"><i class="icofont-trash"></i></button>
+					</div>
+					<input type="file" class="form-control" id="txtAdjuntoMantEdit" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
+					</div>
+				</div>
+				
+				<p class="pError text-danger d-none"><i class="icofont-cat-alt-3"></i> <span id="errorMensaje"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" id="btnGuardarMantenimientoEdit"><i class="icofont-refresh"></i> Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php } ?>
 
 <?php include 'php/modal.php'; ?>
@@ -381,10 +465,104 @@ $('#btnGuardarPersona').click(function() {
 $('#btnModificarUsuarios').click(function() {
 	$('#modalListadoPersonal').modal('show');
 });
-function updateDescipcion(idPlaca){
+function updateDescipcion(idMantenimiento, idPlaca, posicion){
+	var padre= $('tbody tr').eq(posicion); //console.log(padre.html())
+	$.idMantenimiento = idMantenimiento;
 	$.idPlaca = idPlaca;
-
+	$('#sltPlacasMantEdit').val(idPlaca ).selectpicker('render');
+	$('#txtFechaMantEdit').val(moment(padre.find('.tdFecha').text() , 'DD/MM/YYYY').format('YYYY-MM-DD'));
+	$('#sltTipoMantEdit').val(padre.find('.tdTipoMant').attr('data-id') ).selectpicker('render');
+	$('#txtDescipcionMantEdit').val(padre.find('.tdDescipcion').text());
+	$('#txtKilometrajeMantEdit').val(padre.find('.tdKilo').text());
+	$('#txtLugarMantEdit').val(padre.find('.tdLugar').text());
+	$('#txtResponsableMantEdit').val(padre.find('.tdResponsable').text());
+	$('#txtMontoMantEdit').val(padre.find('.tdMonto').text());
+	if( padre.find('.tdArchivo').html().length>5 ){
+		//console.log('hayArchi')
+		$('#spanArchiAdjunto').text(padre.find('.tdArchivo a').attr('href').replace('./files/','') ).parent().removeClass('d-none');
+		$('#txtAdjuntoMantEdit').addClass('d-none');
+	}else{
+		//console.log('no hayArchi')
+		$('#spanArchiAdjunto').parent().addClass('d-none');
+		$('#txtAdjuntoMantEdit').removeClass('d-none');
+	}
+	$('#modalEditMantenimiento').modal('show');
 }
+$('#btnBorrarArchivo').click(function() {
+	$.post("php/borrarArchivo.php", {idMantenimiento: $.idMantenimiento, archivo: $('#spanArchiAdjunto').text() }).done(function (resp) {
+		if(resp=='todo ok'){
+			location.reload();
+		}
+	});
+});
+$('#btnGuardarMantenimientoEdit').click(function() {
+	if( $('#txtFechaEdit').val()=="" ){
+		$('#modalEditMantenimiento .pError').removeClass('d-none');
+		$('#modalEditMantenimiento #errorMensaje').text('Fecha incorrecta');
+	//}else if( $(`#sltTipoMantEdit option:contains('${$('#sltTipoMantEdit').parent().find('.selected a').text()}')`).attr('value') ==null){ 
+	}else if( $('#sltTipoMantEdit').selectpicker('val') ==null){ 
+		$('#modalEditMantenimiento .pError').removeClass('d-none');
+		$('#modalEditMantenimiento #errorMensaje').text('Falta seleccionar un tipo de mantenimiento');
+	}else if( $('#txtDescipcionMantEdit').val()=="" ){
+		$('#modalEditMantenimiento .pError').removeClass('d-none');
+		$('#modalEditMantenimiento #errorMensaje').text('La descripción no puede estar vacía');
+	}else if( $('#txtLugarEdit').val()=="" ){
+		$('#modalEditMantenimiento .pError').removeClass('d-none');
+		$('#modalEditMantenimiento #errorMensaje').text('El lugar no puede estar vacío');
+	}else{
+		var kilome=0, monto=0;
+		if( $('#txtKilometrajeMantEdit').val()!="" ){ kilome = $('#txtKilometrajeMantEdit').val(); }
+		if( $('#txtMontoMantEdit').val()!="" ){ monto = $('#txtMontoMantEdit').val(); }
+
+	$.ajax({url: 'php/actualizarMantenimiento.php', type: 'POST',
+		data: {
+			//placa: $(`#sltPlacasMantEdit option:contains(${$('#sltPlacasMantEdit').parent().find('.selected a').text()})`).attr('value'),
+			fecha: $('#txtFechaMantEdit').val(),
+			tipo: $('#sltTipoMantEdit').selectpicker('val'),
+			descripcion: $('#txtDescipcionMantEdit').val(),
+			kilome: kilome,
+			lugar: $('#txtLugarMantEdit').val(),
+			responsable: $('#txtResponsableMantEdit').val(),
+			monto: monto,
+			idMantenimientoReg: $.idMantenimiento
+		} }).done(function(resp) { console.log(resp)
+			$('#modalEditMantenimiento').modal('hide');
+			if($.isNumeric(resp)){
+				//$('#modalGuardadoExitoso').modal('show');
+
+				if( $('#txtAdjuntoMantEdit')[0].files[0]!=null && $('#spanArchiAdjunto').parent().hasClass('d-none') ){
+				var formData= new FormData();
+				var archivo = $('#txtAdjuntoMantEdit')[0].files[0];
+				formData.append("archivo", archivo );
+				formData.append("placa", $('#sltPlacasEdit').selectpicker('val') );
+				formData.append("idReg", resp );
+				$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false,
+					cache:false
+						}).done(function(resp2) { console.log(resp2)
+						$('#modalEditMantenimiento').modal('hide');
+						if(resp2=='ok'){
+							$('#modalGuardadoExitoso').modal('show');
+							//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
+						}else{
+							$('#h5DetalleFaltan').text('Ocurrió subiendo su archivo, pero los registros se realizaron correctamente');
+							$('#modalFaltaDatos').modal('show');
+						}
+					});
+				}else{
+					$('#modalGuardadoExitoso').modal('show');
+				}
+			
+			}else{
+				$('#h5DetalleFaltan').text('Ocurrió un error al momento de guardar, inténtelo de nuevo porfavor');
+				$('#modalFaltaDatos').modal('show');
+			}
+			
+		});
+		$('#modalGuardadoExitoso').on('hidden.bs.modal', function () { 
+			location.reload();
+		});
+	}
+});
 
 
 <?php } ?>
