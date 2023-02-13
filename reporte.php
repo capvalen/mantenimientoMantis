@@ -4,10 +4,11 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Reportes - Transportes y Contratistas JKM EIRL</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-	<link rel="stylesheet" href="icofont.min.css">
+	<title>Reportes - Transportes y Contratistas JKM SRL</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="css/bootstrap-select.css">
+	<link rel="shortcut icon" href="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/favicon.png" />
 	
 </head>
 <body>
@@ -17,7 +18,10 @@
     border: 1px solid #c5c5c5;
     border-radius: .25rem;
 }
-
+.bg-dark{background-color:#0e0e0e!important}
+.bootstrap-select .dropdown-toggle .filter-option{
+	border: transparent!important;	
+}
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark pl-5">
   <a class="navbar-brand" href="#">Control de mantenimientos </a>
@@ -29,12 +33,12 @@
 		<?php if($_COOKIE['ckPower']=='1'): ?>
 			<li class="nav-item dropdown <?php if($nomArchivo =='productos.php' || $nomArchivo =='compras.php') echo 'active'; ?>">
 				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="icofont-newspaper"></i> Configuraciones
+					<i class="bi bi-gear-wide"></i> Configuraciones
 				</a>
 				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-    		  <a class="dropdown-item" href="#!" id="btnAgregarSerie"><i class="icofont-id"></i> Configurar Placas</a>
-					<a class="dropdown-item" href="#!" id="btnAgregarManteniminto" ><i class="icofont-tools-alt-2"></i> Agregar Mantenimiento</a>
-					<a class="dropdown-item" href="#!" id="btnModificarUsuarios" ><i class="icofont-users-alt-1"></i> Controlar usuarios</a>
+    		  <a class="dropdown-item" href="#!" id="btnAgregarSerie"><i class="bi bi-aspect-ratio"></i> Configurar Placas</a>
+					<a class="dropdown-item" href="#!" id="btnAgregarManteniminto" ><i class="bi bi-node-plus"></i> Agregar Mantenimiento</a>
+					<a class="dropdown-item" href="#!" id="btnModificarUsuarios" ><i class="bi bi-person-plus"></i> Controlar usuarios</a>
 				</div>
 			</li>
     
@@ -45,40 +49,47 @@
 			<?php include 'php/optPlacas.php'; ?>
 		</select>
 	</div>
-	<a class="nav-item nav-link text-light" href="desconectar.php"><i class="icofont-addons"></i> Salir del sistema</a>
+	<a class="nav-item nav-link text-light" href="desconectar.php"><i class="bi bi-sign-turn-left"></i> Salir del sistema</a>
   </div>
 </nav>
 <div class="container-fluid">
 <section>
-<div class="row">
-<div class="col-4 col-sm-3 col-lg-2  text-center">
-<img src="images/64649944_384295198856923_3228315122975899648_n.jpg" class="img-fluid"></div>
-<div class="col-8 col-sm-9">
-	<h3 class="text-center pt-3 ">Transportes y Contratistas JKM EIRL</h3>
-	<h3 class="text-center ">Control de mantenimiento</h3>
-</div>
-</div>
-	
-		<?php if(isset($_GET['placa'])){?> <h4 class="text-center pb-5">Placa: <?= $_GET['placa'];?></h4> 
+	<div class="row py-2">
+		<div class="col-12 col-md-3   text-center">
+			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
+		<div class="col-12 col-md-6">
+			<h3 class="text-center pt-3 ">Transportes & Contratistas JKM S.R.L.</h3>
+			<h3 class="text-center ">Reporte de Mantenimiento Preventivo y Correctivo</h3>
+			<?php if(isset($_GET['placa'])){?> <h4 class="text-center pb-3">Placa: <?= $_GET['placa'];?></h4> 
+		</div>
+		<div class="col-12 col-md-3">
+			<img src="" id="imgFoto" class="img-fluid" onclick="modalFoto()" style="cursor:pointer;">
+		</div>
+	</div>
+		
+		
 
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>N°</th>
-				<th>Fecha</th>
-				<th>Tipo de Mantenimiento</th>
-				<th>Descripción</th>
-				<th>Kilometraje</th>
-				<th>Lugar</th>
-				<th>Responsable</th>
-				<th>Monto</th>
-				<th>Adjunto</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php include "php/listarReportePlacas.php";?>
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th style="white-space: nowrap">N°</th>
+					<th>Fecha</th>
+					<th class="d-print-none">Tipo de Mantenimiento</th>
+					<th>Descripción</th>
+					<th>Kilometraje</th>
+					<th>Lugar</th>
+					<th class="d-print-none">Responsable</th>
+					<th>Monto</th>
+					<th class="d-print-none">Informe</th>
+					<th class="d-print-none">Factura</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php include "php/listarReportePlacas.php";?>
+			</tbody>
+		</table>
+	</div>
 	<?php }else{ ?>
 	<p>Empieze seleccionando una placa en la esquina superior derecha.</p>
 	<?php } ?>
@@ -88,7 +99,7 @@
 <?php if( $_COOKIE['ckPower']==1){ ?>
 <!-- Modal para: agregar una placa -->
 <div class="modal fade" id="modalAddPlaca" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Agregar Placa</h5>
@@ -97,12 +108,19 @@
         </button>
       </div>
       <div class="modal-body">
-				<p>Rellene la serie de la placa:</p>
-				<input type="text" class="form-control text-uppercase" id="txtPlacaNueva">
-				<p class="pError text-danger d-none"><i class="icofont-cat-alt-3"></i> <span id="errorMensaje"></span></p>
-				<button type="button" class="btn btn-outline-primary" id="btnGuardarPlacaNew"><i class="icofont-save"></i> Guardar</button>
+				<div class="row">
+					<div class="col-8">
+						<p class="mb-0">Rellene la serie de la placa:</p>
+						<input type="text" class="form-control text-uppercase" id="txtPlacaNueva">
+						<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
+					</div>
+					<div class="col-4 d-flex align-items-center">
+						<div><button type="button" class="btn btn-outline-primary " id="btnGuardarPlacaNew"><i class="bi bi-shield-plus"></i> Guardar</button></div>
+					</div>
+				</div>
+				<p class="mb-0 mt-3"><strong>Placas registradas:</strong></p>
 				
-				<table class="table table-hover">
+				<table class=" table table-hover">
 				<thead>
 				<tr><th>N°</th>
 				<th>Placa</th>
@@ -130,22 +148,22 @@
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Placa:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Placa:</label>
+					<div class="col-sm-8">
 					<select class="selectpicker" data-live-search="true" id="sltPlacasMant" title="&#xed11; Placas disponibles">
 						<?php include 'php/optPlacas.php'; ?>
 					</select>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Fecha:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
+					<div class="col-sm-8">
 					<input type="date" class="form-control" id="txtFechaMant">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Tipo mantenimiento:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Tipo mantenimiento:</label>
+					<div class="col-sm-8">
 					<select class="selectpicker" data-live-search="true" id="sltTipoMant" title="&#xed11; Tipo de mantenimiento">
 						<option value="1">Preventivo</option>
 						<option value="2">Correctivo</option>
@@ -153,46 +171,52 @@
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Descripción:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Descripción:</label>
+					<div class="col-sm-8">
 					<textarea class="form-control" id="txtDescipcionMant"  rows="3"></textarea>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Kilometraje:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Kilometraje:</label>
+					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtKilometrajeMant" value="0" min="0">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Lugar:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Lugar:</label>
+					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtLugarMant">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Responsable:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Responsable:</label>
+					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtResponsableMant">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Monto:</label>
-					<div class="col-sm-9">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Monto:</label>
+					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtMontoMant" value="0">
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-3 col-form-label">Archivo adjunto:</label>
-					<div class="col-sm-9">
+					<label for="txtAdjuntoMant" class="col-sm-4 col-form-label">Informe:</label>
+					<div class="col-sm-8">
 					<input type="file" class="form-control" id="txtAdjuntoMant" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
 					</div>
 				</div>
+				<div class="form-group row">
+					<label for="txtAdjuntoFactura" class="col-sm-4 col-form-label">Factura:</label>
+					<div class="col-sm-8">
+					<input type="file" class="form-control" id="txtAdjuntoFactura" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
+					</div>
+				</div>
 				
-				<p class="pError text-danger d-none"><i class="icofont-cat-alt-3"></i> <span id="errorMensaje"></span></p>
+				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" id="btnGuardarMantenimientoNew"><i class="icofont-save"></i> Guardar</button>
+        <button type="button" class="btn btn-outline-primary" id="btnGuardarMantenimientoNew"><i class="bi bi-shield-plus"></i> Guardar</button>
       </div>
     </div>
   </div>
@@ -263,19 +287,19 @@
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="txtAdjuntoMantEdit" class="col-sm-3 col-form-label">Archivo adjunto:</label>
+					<label for="txtAdjuntoMantEdit" class="col-sm-3 col-form-label">Informe:</label>
 					<div class="col-sm-9">
 					<div  class="hidden">
-						<span id="spanArchiAdjunto"></span> <button class="btn btn-outline-danger border-0" id="btnBorrarArchivo"><i class="icofont-trash"></i></button>
+						<span id="spanArchiAdjunto"></span> <button class="btn btn-outline-danger border-0" id="btnBorrarArchivo"> <i class="bi bi-eraser"></i> </button>
 					</div>
 					<input type="file" class="form-control" id="txtAdjuntoMantEdit" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
 					</div>
 				</div>
 				
-				<p class="pError text-danger d-none"><i class="icofont-cat-alt-3"></i> <span id="errorMensaje"></span></p>
+				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" id="btnGuardarMantenimientoEdit"><i class="icofont-refresh"></i> Actualizar</button>
+        <button type="button" class="btn btn-outline-primary" id="btnGuardarMantenimientoEdit"><i class="bi bi-arrow-clockwise"></i> Actualizar</button>
       </div>
     </div>
   </div>
@@ -284,9 +308,8 @@
 <?php } ?>
 
 <?php include 'php/modal.php'; ?>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 <script src="js/moment.js"></script>
 <script src="js/bootstrap-select.min.js"></script>
 <script>
@@ -294,6 +317,7 @@ $(document).ready(function() {
 	$('.selectpicker').selectpicker('render');
 	$('.selectpicker').selectpicker('val', -1);
 	$('#txtFechaMant').val( moment().format('YYYY-MM-DD') );
+	datosIniciales();
 })
 $('#sltPlacas').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if( $('#sltPlacas').val()!=null ){	
@@ -361,29 +385,22 @@ $('#btnGuardarMantenimientoNew').click(function() {
 			$('#modalAddMantenimiento').modal('hide');
 			if($.isNumeric(resp)){
 				//$('#modalGuardadoExitoso').modal('show');
-
-				if( $('#txtAdjuntoMant')[0].files[0]!=null ){
-				var formData= new FormData();
-				var archivo = $('#txtAdjuntoMant')[0].files[0];
-				formData.append("archivo", archivo );
-				formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
-				formData.append("idReg", resp );
-				$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false,
-					cache:false
-						}).done(function(resp2) { console.log(resp2)
-						$('#modalAddMantenimiento').modal('hide');
-						if(resp2=='ok'){
+				
+				subirAdjunto(resp)
+				.then(que=>{
+					console.log('respuesta 1' , que);
+					subirFactura(resp)
+					.then(que2=>{
+						console.log('respuesta 2' , que2);
+						if(que && que2){
 							$('#modalGuardadoExitoso').modal('show');
-							//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
 						}else{
-							$('#h5DetalleFaltan').text('Ocurrió subiendo su archivo, pero los registros se realizaron correctamente');
+							$('#h5DetalleFaltan').text('Ocurrió un error al momento de guardar, inténtelo de nuevo porfavor');
 							$('#modalFaltaDatos').modal('show');
 						}
-					});
-				}else{
-					$('#modalGuardadoExitoso').modal('show');
-				}
-			
+					})
+				})
+				
 			}else{
 				$('#h5DetalleFaltan').text('Ocurrió un error al momento de guardar, inténtelo de nuevo porfavor');
 				$('#modalFaltaDatos').modal('show');
@@ -395,6 +412,57 @@ $('#btnGuardarMantenimientoNew').click(function() {
 		});
 	}
 });
+function subirAdjunto (resp){
+	return new Promise((resolve, reject)=>{
+		if( $('#txtAdjuntoFactura')[0].files[0]!=null ){
+			var formData= new FormData();
+			var archivo = $('#txtAdjuntoFactura')[0].files[0];
+			formData.append("archivo", archivo );
+			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
+			formData.append("idReg", resp );
+			$.ajax({url: 'php/subirArchivo_fact.php', type: 'POST', data: formData, contentType: false, processData: false,
+				cache:false
+					}).done(function(resp3) { console.log(resp3)
+					$('#modalAddMantenimiento').modal('hide');
+					if(resp3=='ok'){
+						resolve(true);
+						//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
+					}else{
+						resolve(false);
+					
+					}
+				});
+			}else{
+				resolve(true);
+			}
+	});
+}
+function subirFactura(resp){
+	return new Promise((resolve, reject)=>{
+		if( $('#txtAdjuntoMant')[0].files[0]!=null ){
+			var formData= new FormData();
+			var archivo = $('#txtAdjuntoMant')[0].files[0];
+			formData.append("archivo", archivo );
+			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
+			formData.append("idReg", resp );
+			$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false,
+				cache:false
+					}).done(function(resp2) { console.log(resp2)
+					$('#modalAddMantenimiento').modal('hide');
+					if(resp2=='ok'){
+						resolve(true);
+						//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
+					}else{
+						resolve(false);
+					
+					}
+				});
+			}else{
+				resolve(true);
+			}
+
+	})
+}
 $('#btnAddNewUser').click(function() {
 	$('#modalListadoPersonal').modal('hide');
 	$('#modalNuevoPersonal').modal('show');
@@ -569,5 +637,46 @@ $('#btnGuardarMantenimientoEdit').click(function() {
 function pantallaOver(tipo) {
 	if(tipo){$('#overlay').css('display', 'initial');}
 	else{ $('#overlay').css('display', 'none'); }
+}
+function datosIniciales(){
+	<?php if( isset($_GET['placa']) ):?>
+		document.getElementById('fPlaca').innerText = "<?= $_GET['placa']; ?>";
+		let datos = new FormData();
+		datos.append('placa', "<?= $_GET['placa']; ?>");
+		fetch('php/pedirDatosPorPlaca.php',{
+			method:'POST', body:datos
+		}).then(promesa=>{
+			promesa.json()
+			.then(resp=>{
+				console.log(resp);
+				if(resp.foto ==''){
+					document.getElementById('imgFoto').src="./images/bosquejo.png";
+				}else{
+					document.getElementById('imgFoto').src="./images/"+resp.foto;
+				}
+			})
+		
+		})
+	<?php endif;?>
+}
+function modalFoto(){
+	$('#modalFoto').modal('show');
+}
+function previsualizarFoto(){
+	const input = document.getElementById('plaFoto');
+	if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#divPreview')
+        .attr('src', e.target.result)
+        .width(150)
+        .height('auto')
+				.css('display', 'block')
+				;
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  }
 }
 </script>

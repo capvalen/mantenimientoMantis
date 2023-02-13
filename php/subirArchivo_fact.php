@@ -1,7 +1,7 @@
 <?php 
 include "conexion.php";
 
-$ruta = "../files/";
+$ruta = "../facturas/";
 
 $file = urlencode($_POST['placa']."-".$_FILES["archivo"]['name']);
 
@@ -17,7 +17,7 @@ if(!is_dir($ruta))
 
 if ($file && move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivoFinal)){
 
-	$sql="UPDATE `mantenimiento` SET `mantAdjunto`='{$archivoFinal}' WHERE `idMantenimiento`={$_POST['idReg']};";
+	$sql="UPDATE `mantenimiento` SET `mantFactura`='{$archivoFinal}' WHERE `idMantenimiento`={$_POST['idReg']};";
 	$resultado=$cadena->query($sql);
 
 	//echo $ruta;//devolvemos el nombre del archivo para pintar la imagen

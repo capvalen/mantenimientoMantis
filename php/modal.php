@@ -8,9 +8,9 @@
         <h4 class="pt-2 deep-purple-text text-center">Guardado Exitósamente</h4>
 				<h5 class="text-center text-muted" id="h5Detalle"></h5>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-0">
 				<p class="text-danger d-none" id="pError3"></p>
-        <button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="icofont-toy-cat"></i> Ok</button>
+        <button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="bi bi-check"></i> Ok</button>
       </div>
     </div>
   </div>
@@ -26,8 +26,8 @@
         <h4 class="pt-2 deep-purple-text text-center">Faltan Datos</h4>
 				<h5 class="text-center text-muted" id="h5DetalleFaltan"></h5>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="icofont-toy-cat"></i> Ok</button>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="bi bi-check"></i> Ok</button>
       </div>
     </div>
   </div>
@@ -36,14 +36,14 @@
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><i class="icofont-group"></i> Listado de personal</h5>
+        <h5 class="modal-title"> Listado de personal</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
 				<div class="table-responsive">
-					<button class="btn btn-outline-success mb-2" id="btnAddNewUser"><i class="icofont-plus-circle"></i> Agregar nuevo personal</button>
+					<button class="btn btn-outline-success mb-2" id="btnAddNewUser"><i class="bi bi-person-plus"></i> Agregar nuevo personal</button>
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -88,10 +88,10 @@
 					<option value="2">Colaborador</option>
 				</select>
       </div>
-      <div class="modal-footer">
-				<label for="" class="text-danger d-none" id="lblError"><i class="icofont-cat-alt-3"></i> <span></span></label>
-				<label for="" class="text-success d-none" id="lblExito"><i class="icofont-fish-5"></i> <span></span></label>
-        <button type="button" class="btn btn-outline-primary" id="btnGuardarPersona"><i class="icofont-save"></i> Guardar</button>
+      <div class="modal-footer border-0">
+				<label for="" class="text-danger d-none" id="lblError"><i class="bi bi-exclamation-circle"></i> <span></span></label>
+				<label for="" class="text-success d-none" id="lblExito"><i class="bi bi-gear-wide"></i> <span></span></label>
+        <button type="button" class="btn btn-outline-primary" id="btnGuardarPersona"><i class="bi bi-node-plus"></i> Guardar</button>
       </div>
     </div>
   </div>
@@ -108,9 +108,9 @@
       <div class="modal-body">
 				<p>¿Está seguro que desea borrar a: <strong id="strNombre"></strong>?</p>
       </div>
-      <div class="modal-footer">				
-        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="icofont-save"></i> Cancelar</button>
-        <button type="button" class="btn btn-outline-danger" id="btnBorrarPersona"><i class="icofont-save"></i> Borrar</button>
+      <div class="modal-footer border-0">				
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-danger" id="btnBorrarPersona"><i class="bi bi-eraser"></i> Borrar</button>
       </div>
     </div>
   </div>
@@ -127,9 +127,9 @@
       <div class="modal-body">
 				<p>¿Está seguro que desea éste registro?</p>
       </div>
-      <div class="modal-footer">				
-        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="icofont-save"></i> Cancelar</button>
-        <button type="button" class="btn btn-outline-danger" id="btnBorrarRegistro"><i class="icofont-save"></i> Borrar</button>
+      <div class="modal-footer border-0">				
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-danger" id="btnBorrarRegistro"><i class="bi bi-eraser"></i> Borrar</button>
       </div>
     </div>
   </div>
@@ -146,9 +146,33 @@
       <div class="modal-body">
 				<p>¿Está seguro que desea ésta placa?</p>
       </div>
-      <div class="modal-footer">				
-        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="icofont-save"></i> Cancelar</button>
-        <button type="button" class="btn btn-outline-danger" id="btnBorrarPlaca"><i class="icofont-save"></i> Borrar</button>
+      <div class="modal-footer border-0">				
+        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-danger" id="btnBorrarPlaca"><i class="bi bi-eraser"></i> Borrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para adjuntar la foto -->
+<div class="modal fade" id="modalFoto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="exampleModalLabel">Foto de la placa: <span id="fPlaca"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Puede subir una nueva foto para la unidad</p>
+				<input type="file" id="plaFoto" class="form-control" onchange="previsualizarFoto()" accept="image/*">
+				<div id="">
+					<img id="divPreview" src="#" alt="image" style="width:70%;height:auto; margin:0 auto;display: none;">
+				</div>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Subir archivo</button>
       </div>
     </div>
   </div>
