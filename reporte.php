@@ -1,3 +1,9 @@
+<?php
+if( !isset($_COOKIE['ckPower']) ) {
+	header("Location: index.html");
+	exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -55,15 +61,15 @@
 <div class="container-fluid">
 <section>
 	<div class="row py-2">
-		<div class="col-12 col-md-3   text-center">
+		<div class="order-0 order-md-0 col-6 col-md-3 text-center">
 			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
-		<div class="col-12 col-md-6">
+		<div class="order-2 order-md-1 col-12 col-md-6">
 			<h3 class="text-center pt-3 ">Transportes & Contratistas JKM S.R.L.</h3>
 			<h3 class="text-center ">Reporte de Mantenimiento Preventivo y Correctivo</h3>
 			<?php if(isset($_GET['placa'])){?> <h4 class="text-center pb-3">Placa: <?= $_GET['placa'];?></h4> 
 		</div>
-		<div class="col-12 col-md-3">
-			<img src="" id="imgFoto" class="img-fluid" onclick="modalFoto()" style="cursor:pointer;">
+		<div class="order-1 order-md-2 col-6 col-md-2 text-center">
+			<img src="" id="imgFoto" class="img-fluid w-75" onclick="modalFoto()" style="cursor:pointer;">
 		</div>
 	</div>
 		
@@ -295,6 +301,15 @@
 					<input type="file" class="form-control" id="txtAdjuntoMantEdit" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
 					</div>
 				</div>
+				<div class="form-group row">
+					<label for="txtFacturaEdit" class="col-sm-3 col-form-label">Factura:</label>
+					<div class="col-sm-9">
+					<div  class="hidden">
+						<span id="spanFacturaEdit"></span> <button class="btn btn-outline-danger border-0" id="btnBorrarFacturaEdit"> <i class="bi bi-eraser"></i> </button>
+					</div>
+					<input type="file" class="form-control" id="txtFacturaEdit" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
+					</div>
+				</div>
 				
 				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
       </div>
@@ -313,6 +328,7 @@
 <script src="js/moment.js"></script>
 <script src="js/bootstrap-select.min.js"></script>
 <script>
+var idGlobal='';
 $(document).ready(function() {
 	$('.selectpicker').selectpicker('render');
 	$('.selectpicker').selectpicker('val', -1);
@@ -420,21 +436,20 @@ function subirAdjunto (resp){
 			formData.append("archivo", archivo );
 			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
 			formData.append("idReg", resp );
-			$.ajax({url: 'php/subirArchivo_fact.php', type: 'POST', data: formData, contentType: false, processData: false,
-				cache:false
-					}).done(function(resp3) { console.log(resp3)
-					$('#modalAddMantenimiento').modal('hide');
-					if(resp3=='ok'){
-						resolve(true);
-						//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
-					}else{
-						resolve(false);
-					
-					}
-				});
-			}else{
-				resolve(true);
-			}
+			$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false, cache:false
+				}).done(function(resp3) { console.log(resp3)
+				$('#modalAddMantenimiento').modal('hide');
+				if(resp3=='ok'){
+					resolve(true);
+					//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
+				}else{
+					resolve(false);
+				
+				}
+			});
+		}else{
+			resolve(true);
+		}
 	});
 }
 function subirFactura(resp){
@@ -445,22 +460,65 @@ function subirFactura(resp){
 			formData.append("archivo", archivo );
 			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
 			formData.append("idReg", resp );
-			$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false,
-				cache:false
-					}).done(function(resp2) { console.log(resp2)
-					$('#modalAddMantenimiento').modal('hide');
-					if(resp2=='ok'){
-						resolve(true);
-						//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
-					}else{
-						resolve(false);
-					
-					}
-				});
+			$.ajax({url: 'php/subirArchivo_fact.php', type: 'POST', data: formData, contentType: false, processData: false,cache:false
+				}).done(function(resp2) { console.log(resp2)
+				$('#modalAddMantenimiento').modal('hide');
+				if(resp2=='ok'){
+					resolve(true);
+					//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
+				}else{
+					resolve(false);
+				
+				}
+			});
 			}else{
 				resolve(true);
 			}
 
+	})
+}
+function subirAdjuntoE (resp){
+	return new Promise((resolve, reject)=>{
+		if( $('#txtAdjuntoMantEdit')[0].files[0]!=null ){
+			var formData= new FormData();
+			var archivo = $('#txtAdjuntoMantEdit')[0].files[0];
+			formData.append("archivo", archivo );
+			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
+			formData.append("idReg", resp );
+			$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false, cache:false
+				}).done(function(resp3) { console.log(resp3)
+				if(resp3=='ok'){
+					resolve(true);
+					//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
+				}else{
+					resolve(false);
+				}
+			});
+		}else{
+			resolve(true);
+		}
+	});
+}
+function subirFacturaE (resp){
+	return new Promise((resolve, reject)=>{
+		if( $('#txtFacturaEdit')[0].files[0]!=null ){
+			var formData= new FormData();
+			var archivo = $('#txtFacturaEdit')[0].files[0];
+			formData.append("archivo", archivo );
+			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
+			formData.append("idReg", resp );
+			$.ajax({url: 'php/subirArchivo_fact.php', type: 'POST', data: formData, contentType: false, processData: false,cache:false
+				}).done(function(resp2) { console.log(resp2)
+				if(resp2=='ok'){
+					resolve(true);
+					//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
+				}else{
+					resolve(false);
+				}
+			});
+			}else{
+				resolve(true);
+			}
 	})
 }
 $('#btnAddNewUser').click(function() {
@@ -554,10 +612,26 @@ function updateDescipcion(idMantenimiento, idPlaca, posicion){
 		$('#spanArchiAdjunto').parent().addClass('d-none');
 		$('#txtAdjuntoMantEdit').removeClass('d-none');
 	}
+	if( padre.find('.tdFactura').html().length>5 ){
+		//console.log('hayArchi')
+		$('#spanFacturaEdit').text(padre.find('.tdFactura a').attr('href').replace('./facturas/','') ).parent().removeClass('d-none');
+		$('#txtFacturaEdit').addClass('d-none');
+	}else{
+		//console.log('no hayArchi')
+		$('#spanFacturaEdit').parent().addClass('d-none');
+		$('#txtFacturaEdit').removeClass('d-none');
+	}
 	$('#modalEditMantenimiento').modal('show');
 }
 $('#btnBorrarArchivo').click(function() {
 	$.post("php/borrarArchivo.php", {idMantenimiento: $.idMantenimiento, archivo: $('#spanArchiAdjunto').text() }).done(function (resp) {
+		if(resp=='todo ok'){
+			location.reload();
+		}
+	});
+});
+$('#btnBorrarFacturaEdit').click(function() {
+	$.post("php/borrarFactura.php", {idMantenimiento: $.idMantenimiento, archivo: $('#spanFacturaEdit').text() }).done(function (resp) {
 		if(resp=='todo ok'){
 			location.reload();
 		}
@@ -598,27 +672,21 @@ $('#btnGuardarMantenimientoEdit').click(function() {
 			if($.isNumeric(resp)){
 				//$('#modalGuardadoExitoso').modal('show');
 
-				if( $('#txtAdjuntoMantEdit')[0].files[0]!=null && $('#spanArchiAdjunto').parent().hasClass('d-none') ){
-				var formData= new FormData();
-				var archivo = $('#txtAdjuntoMantEdit')[0].files[0];
-				formData.append("archivo", archivo );
-				formData.append("placa", $('#sltPlacasMantEdit').selectpicker('val') );
-				formData.append("idReg", resp );
-				$.ajax({url: 'php/subirArchivo.php', type: 'POST', data: formData, contentType: false, processData: false,
-					cache:false
-						}).done(function(resp2) { console.log(resp2)
+				subirAdjuntoE(resp)
+				.then(que=>{
+					console.log('respuesta 1' , que);
+					subirFacturaE(resp)
+					.then(que2=>{
+						console.log('respuesta 2' , que2);
 						$('#modalEditMantenimiento').modal('hide');
-						if(resp2=='ok'){
+						if(que && que2){
 							$('#modalGuardadoExitoso').modal('show');
-							//$.post('php/updateNombreFile.php', {idPlaca: $('#sltPlacasMant').selectpicker('val'), subida: encodeURIComponent(archivo.name)} ).done(function(respuesta){console.log(respuesta)})
 						}else{
-							$('#h5DetalleFaltan').text('Ocurrió subiendo su archivo, pero los registros se realizaron correctamente');
+							$('#h5DetalleFaltan').text('Ocurrió un error al momento de guardar, inténtelo de nuevo porfavor');
 							$('#modalFaltaDatos').modal('show');
 						}
-					});
-				}else{
-					$('#modalGuardadoExitoso').modal('show');
-				}
+					})
+				})
 			
 			}else{
 				$('#h5DetalleFaltan').text('Ocurrió un error al momento de guardar, inténtelo de nuevo porfavor');
@@ -638,6 +706,7 @@ function pantallaOver(tipo) {
 	if(tipo){$('#overlay').css('display', 'initial');}
 	else{ $('#overlay').css('display', 'none'); }
 }
+
 function datosIniciales(){
 	<?php if( isset($_GET['placa']) ):?>
 		document.getElementById('fPlaca').innerText = "<?= $_GET['placa']; ?>";
@@ -649,6 +718,7 @@ function datosIniciales(){
 			promesa.json()
 			.then(resp=>{
 				console.log(resp);
+				idGlobal = resp.id;
 				if(resp.foto ==''){
 					document.getElementById('imgFoto').src="./images/bosquejo.png";
 				}else{
@@ -678,5 +748,18 @@ function previsualizarFoto(){
 
     reader.readAsDataURL(input.files[0]);
   }
+}
+function subirFotoPlaca(){
+	if( $('#plaFoto')[0].files[0]!=null ){
+		var formData= new FormData();
+		var archivo = $('#plaFoto')[0].files[0];
+		formData.append("archivo", archivo );
+		formData.append("idPlaca", idGlobal );
+		$.ajax({url: 'php/subirArchivo_foto.php', type: 'POST', data: formData, contentType: false, processData: false, cache:false
+			}).done(function(resp) { console.log(resp)
+			$('#modalFoto').modal('hide');
+			location.reload();
+		});
+	}
 }
 </script>

@@ -17,7 +17,8 @@ if(!is_dir($ruta))
 
 if ($file && move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivoFinal)){
 
-	$sql="UPDATE `placas` SET `foto`='{$archivoFinal}' WHERE `idPlaca`={$_POST['idReg']};";
+	$sql="UPDATE `placas` SET `foto`='{$queArchivo}' WHERE `idPlaca`={$_POST['idPlaca']};";
+	echo $sql;
 	$resultado=$cadena->query($sql);
 
 	//echo $ruta;//devolvemos el nombre del archivo para pintar la imagen

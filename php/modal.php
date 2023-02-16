@@ -172,7 +172,7 @@
 				</div>
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Subir archivo</button>
+        <button type="button" class="btn btn-primary" onclick="subirFotoPlaca()" data-dismiss="modal">Subir archivo</button>
       </div>
     </div>
   </div>
