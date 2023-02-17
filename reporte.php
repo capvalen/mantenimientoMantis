@@ -29,35 +29,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 	border: transparent!important;	
 }
 </style>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark pl-5">
-  <a class="navbar-brand" href="#">Control de mantenimientos </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav mr-auto">
-		<?php if($_COOKIE['ckPower']=='1'): ?>
-			<li class="nav-item dropdown <?php if($nomArchivo =='productos.php' || $nomArchivo =='compras.php') echo 'active'; ?>">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="bi bi-gear-wide"></i> Configuraciones
-				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-    		  <a class="dropdown-item" href="#!" id="btnAgregarSerie"><i class="bi bi-aspect-ratio"></i> Configurar Placas</a>
-					<a class="dropdown-item" href="#!" id="btnAgregarManteniminto" ><i class="bi bi-node-plus"></i> Agregar Mantenimiento</a>
-					<a class="dropdown-item" href="#!" id="btnModificarUsuarios" ><i class="bi bi-person-plus"></i> Controlar usuarios</a>
-				</div>
-			</li>
-    
-		<?php endif; ?>
-	</div>
-	<div class="form-inline">
-		<select class="selectpicker" data-live-search="true" id="sltPlacas" title="&#xed11; Filtro de placas">
-			<?php include 'php/optPlacas.php'; ?>
-		</select>
-	</div>
-	<a class="nav-item nav-link text-light" href="desconectar.php"><i class="bi bi-sign-turn-left"></i> Salir del sistema</a>
-  </div>
-</nav>
+<?php include 'menu.php';?>
 <div class="container-fluid">
 <section>
 	<div class="row py-2">
@@ -72,7 +44,13 @@ if( !isset($_COOKIE['ckPower']) ) {
 			<img src="" id="imgFoto" class="img-fluid w-75" onclick="modalFoto()" style="cursor:pointer;">
 		</div>
 	</div>
-		
+	<?php if( $_COOKIE['ckPower']==1){ ?>
+		<div class="row">
+			<div class="col">
+				<button class="btn btn-outline-primary mb-3" onclick="abrirMantenimientoAutomatico()"><i class="bi bi-node-plus"></i>  Agregar mantenimiento</button>
+			</div>
+		</div>
+	<?php } ?>
 		
 
 	<div class="table-responsive">
@@ -117,6 +95,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 				<div class="row">
 					<div class="col-8">
 						<p class="mb-0">Rellene la serie de la placa:</p>
+						<input type="text" class="form-control text-uppercase" id="txtMovilidadNueva">
 						<input type="text" class="form-control text-uppercase" id="txtPlacaNueva">
 						<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
 					</div>
@@ -129,6 +108,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 				<table class=" table table-hover">
 				<thead>
 				<tr><th>N°</th>
+				<th>Movilidad</th>
 				<th>Placa</th>
 				<th>@</th></tr>
 				</thead>
@@ -347,11 +327,14 @@ $('#btnAgregarSerie').click(function() {
 	$('#modalAddPlaca').modal('show');
 });
 $('#btnGuardarPlacaNew').click(function() {
-	if( $('#txtPlacaNueva').val()==''){
+	if( $('#txtPlacaNueva').val()=='' || $('#txtMovilidadNueva').val()==''){
 		$('#modalAddPlaca .pError').removeClass('d-none');
 		$('#errorMensaje').text('Debe rellenar un valor en la placa');
 	}else{
-		$.ajax({url: 'php/insertarPlaca.php', type: 'POST', data: { placa: $('#txtPlacaNueva').val() }}).done(function(resp) {
+		$.ajax({url: 'php/insertarPlaca.php', type: 'POST', data: {
+			movilidad: $('#txtMovilidadNueva').val(),
+			placa: $('#txtPlacaNueva').val()
+		}}).done(function(resp) {
 //			console.log(resp)
 			$('#modalAddPlaca').modal('hide');
 			if(resp=='ok'){
@@ -430,9 +413,9 @@ $('#btnGuardarMantenimientoNew').click(function() {
 });
 function subirAdjunto (resp){
 	return new Promise((resolve, reject)=>{
-		if( $('#txtAdjuntoFactura')[0].files[0]!=null ){
+		if( $('#txtAdjuntoMant')[0].files[0]!=null ){
 			var formData= new FormData();
-			var archivo = $('#txtAdjuntoFactura')[0].files[0];
+			var archivo = $('#txtAdjuntoMant')[0].files[0];
 			formData.append("archivo", archivo );
 			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
 			formData.append("idReg", resp );
@@ -454,9 +437,9 @@ function subirAdjunto (resp){
 }
 function subirFactura(resp){
 	return new Promise((resolve, reject)=>{
-		if( $('#txtAdjuntoMant')[0].files[0]!=null ){
+		if( $('#txtAdjuntoFactura')[0].files[0]!=null ){
 			var formData= new FormData();
-			var archivo = $('#txtAdjuntoMant')[0].files[0];
+			var archivo = $('#txtAdjuntoFactura')[0].files[0];
 			formData.append("archivo", archivo );
 			formData.append("placa", $('#sltPlacasMant').selectpicker('val') );
 			formData.append("idReg", resp );
@@ -701,6 +684,9 @@ $('#btnGuardarMantenimientoEdit').click(function() {
 });
 
 
+function modalFoto(){
+	$('#modalFoto').modal('show');
+}
 <?php } ?>
 function pantallaOver(tipo) {
 	if(tipo){$('#overlay').css('display', 'initial');}
@@ -728,9 +714,6 @@ function datosIniciales(){
 		
 		})
 	<?php endif;?>
-}
-function modalFoto(){
-	$('#modalFoto').modal('show');
 }
 function previsualizarFoto(){
 	const input = document.getElementById('plaFoto');
@@ -761,5 +744,9 @@ function subirFotoPlaca(){
 			location.reload();
 		});
 	}
+}
+function abrirMantenimientoAutomatico(){
+	$('#sltPlacasMant').val( idGlobal ).selectpicker('render');
+	$('#modalAddMantenimiento').modal('show');
 }
 </script>

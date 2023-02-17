@@ -13,7 +13,7 @@ if(!isset($_GET['placa'])){
 	FROM `mantenimiento` m
 	inner join tipoMantenimiento tpm on tpm.idTipoMantenimiento = m.idTipoMantenimiento
 	inner join placas pl on pl.idPlaca = m.idPlaca
-	where upper(pl.placSerie) = upper('{$_GET['placa']}') and mantActivo=1 ORDER BY  manFecha2 DESC ;";
+	where concat(upper(pl.movilidad), ' ',upper(pl.placSerie)) = upper('{$_GET['placa']}') and mantActivo=1 ORDER BY  manFecha2 DESC ;";
 	
 	$resultado=$cadena->query($sql);
 	if($resultado->num_rows>=1){
@@ -53,5 +53,6 @@ if(!isset($_GET['placa'])){
 	}
 }
 
+$cadena = null;
 
  ?>

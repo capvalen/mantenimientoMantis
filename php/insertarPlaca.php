@@ -2,7 +2,7 @@
 
 include "conexion.php";
 
-$sql="INSERT INTO `placas`(`idPlaca`, `placSerie`, `placActivo`) VALUES (null, '{$_POST['placa']}',1);";
+$sql="INSERT INTO `placas`(`idPlaca`, movilidad, `placSerie`, `placActivo`) VALUES (null, '{$_POST['movilidad']}', '{$_POST['placa']}',1);";
 $resultado=$cadena->query($sql);
 if($resultado){
 	echo "ok";
