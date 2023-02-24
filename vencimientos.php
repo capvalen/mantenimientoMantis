@@ -35,7 +35,6 @@ if( !isset($_COOKIE['ckPower']) ) {
 		<div class="order-0 order-md-0 col-6 col-md-3 text-center">
 			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
 		<div class="order-2 order-md-1 col-12 col-md-6">
-			<h3 class="text-center pt-3 ">Transportes & Contratistas JKM S.R.L.</h3>
 			<h3 class="text-center ">Registro de fechas de vencimiento</h3>
 			
 		</div>
@@ -112,14 +111,20 @@ if( !isset($_COOKIE['ckPower']) ) {
 					method:'POST', body:datos
 				}).then(resp=>{
 					resp.text()
-					.then(data=>{
-						//console.log(data);
+					.then(data=>{ //console.log(data);
 						document.querySelector('#soat .resultado').innerHTML=data;
 					})
-				})
-				
+				});
 				break;
 			case 'aceite':
+				fetch('php/vencimientos/plantilla.php',{
+					method:'POST', body:datos
+				}).then(resp=>{
+					resp.text()
+					.then(data=>{ //console.log(data);
+						document.querySelector('#aceite .resultado').innerHTML=data;
+					})
+				});
 				break;
 		
 			default:

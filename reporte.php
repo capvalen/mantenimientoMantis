@@ -36,7 +36,6 @@ if( !isset($_COOKIE['ckPower']) ) {
 		<div class="order-0 order-md-0 col-6 col-md-3 text-center">
 			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
 		<div class="order-2 order-md-1 col-12 col-md-6">
-			<h3 class="text-center pt-3 ">Transportes & Contratistas JKM S.R.L.</h3>
 			<h3 class="text-center ">Reporte de Mantenimiento Preventivo y Correctivo</h3>
 			<?php if(isset($_GET['placa'])){?> <h4 class="text-center pb-3">Placa: <?= $_GET['placa'];?></h4> 
 		</div>
