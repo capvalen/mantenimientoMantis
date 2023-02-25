@@ -107,13 +107,7 @@ if( !isset($_COOKIE['ckPower']) ) {
       </div>
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
-				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
-					<div class="col-sm-8">
-						<input type="date" class="form-control" id="txtFechaHoroEdit">
-					</div>
-				</div>
-				<div class="form-group row">
+				<div class="form-group row ">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Placa:</label>
 					<div class="col-sm-8">
 					<select class="selectpicker" data-live-search="true" id="sltPlacaHoroEdit" title="&#xed11; Placas disponibles" >
@@ -121,19 +115,25 @@ if( !isset($_COOKIE['ckPower']) ) {
 					</select>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row grupoHoro">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
+					<div class="col-sm-8">
+						<input type="date" class="form-control" id="txtFechaHoroEdit">
+					</div>
+				</div>
+				<div class="form-group row grupoHoro">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Horómetro / Odómetro actual:</label>
 					<div class="col-sm-8">
 						<input type="number" class="form-control" id="txtHoroEdit">
 					</div>
 				</div>
-				<div class="form-group row d-none">
+				<div class="form-group row grupoActual">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
 					<div class="col-sm-8">
 						<input type="date" class="form-control" id="txtFechaActualEdit">
 					</div>
 				</div>
-				<div class="form-group row d-none">
+				<div class="form-group row grupoActual">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Odómetro actual:</label>
 					<div class="col-sm-8">
 						<input type="number" class="form-control" id="txtOdoAntEdit">
@@ -158,7 +158,12 @@ if( !isset($_COOKIE['ckPower']) ) {
 				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar</button>
+				<div class="grupoHoro">
+					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar</button>
+				</div>
+				<div class="grupoActual">
+					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoActual()"><i class="bi bi-save"></i> Insertar</button>
+				</div>
       </div>
     </div>
   </div>
@@ -171,7 +176,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 <script src="js/moment.js"></script>
 <script src="js/bootstrap-select.min.js"></script>
 <script>
-	var idPlaca=-1;
+	var idPlaca=-1, queTipo='';
 	$(document).ready(function() {
 		$('.selectpicker').selectpicker('render');
 		$('.selectpicker').selectpicker('val', -1);
@@ -237,13 +242,31 @@ if( !isset($_COOKIE['ckPower']) ) {
 
 		}
 	}
+	function abrirModalInsertarMantenimiento(tipo){
+		queTipo = tipo;
+		if(tipo == 'actualizacion'){
+			$('#modalInsertarHodometro .modal-title').text('Actualización de KM')
+			//$('.grupoHoro').removeClass('d-none')
+			//$('.grupoActual').addClass('d-none')
+		}else{
+			$('#modalInsertarHodometro .modal-title').text('Agregar mantenimiento de KM/hora')
+			//$('.grupoHoro').addClass('d-none')
+			//$('.grupoActual').removeClass('d-none')
+		}
+		$('#modalInsertarHodometro').modal('show')
+	}
 	$('#sltPlacaHoroEdit').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 		if(clickedIndex != undefined){
 			let idNuevo = $('#sltPlacaHoroEdit').selectpicker('val');
 			console.log('id', idNuevo);
 			$('#txtHoroEdit').val($('#'+idNuevo+' .tdHorometro').data('value'))
 			$('#txtOdoAntEdit').val($('#'+idNuevo+' .tdActual').data('value'))
-			$('#txtFechaActualEdit').val($('#'+idNuevo+' .tdFecha2').data('value'))
+			if(queTipo == 'actualizacion'){
+				$('#txtFechaActualEdit').val($('#'+idNuevo+' .tdFecha2').data('value'))
+			}else{
+				$('#txtFechaHoroEdit').val($('#'+idNuevo+' .tdFecha1').data('value'))
+
+			}
 		}
 	});
 	function insertarMantenimientoHoro(){
@@ -274,6 +297,44 @@ if( !isset($_COOKIE['ckPower']) ) {
 				}
 			})
 		}
+	}
+	function insertarMantenimientoActual(){
+		if($('#sltPlacaHoroEdit').selectpicker('val')==null){
+			$('#modalInsertarHodometro #errorMensaje').text('La placa esta vacía');
+			$('#modalInsertarHodometro .pError').removeClass('d-none')
+		}else if( $('#txtOdoAntEdit').val()=='' ){
+			$('#modalInsertarHodometro #errorMensaje').text('El valor de Hodómetro no puede estar vacío');
+			$('#modalInsertarHodometro .pError').removeClass('d-none')
+		}else{
+			let datos = new FormData();
+			datos.append('tipo', 'horometro');
+			datos.append('idPlaca', $('#sltPlacaHoroEdit').selectpicker('val') );
+			datos.append('fechaHoro', $('#txtFechaHoroEdit').val() );
+			datos.append('horometro', $('#txtHoroEdit').val() );
+			datos.append('fechaActual', $('#txtFechaActualEdit').val() );
+			datos.append('kilometraje', $('#txtOdoAntEdit').val() );
+			datos.append('observacion', $('#txtObservacionEdit').val() );
+			datos.append('kmhoras', $('#sltTipo1').val() );
+			fetch('php/vencimientos/insertarMantenimientos.php', {
+				method:'POST', body:datos
+			})
+			.then(response => response.text())
+			.then(respuesta => {
+				if(respuesta=='ok'){
+					$('#modalInsertarHodometro').modal('hide');
+					cambiarPlantilla('aceite');
+					limpiarCamposInsert()
+				}
+			})
+		}
+	}
+	function limpiarCamposInsert(){
+		$('#sltPlacaHoroEdit').selectpicker('val', -1)
+		$('#txtFechaHoroEdit').val('')
+		$('#fechaActual').val('')
+		$('#txtHoroEdit').val('')
+		$('#txtOdoAntEdit').val('')
+		$('#txtObservacionEdit').val('')
 	}
 </script>
 </body>

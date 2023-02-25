@@ -10,6 +10,7 @@ function horometro($cadena){
 	`observacion`, `tipo`) VALUES 
 	({$_POST['idPlaca']}, '{$_POST['fechaHoro']}', {$_POST['horometro']}, '{$_POST['fechaActual']}', {$_POST['kilometraje']}, 
 	'{$_POST['kilometraje']}',{$_POST['observacion']})";
+	echo $sql; die();
 	if( $cadena->query($sql)){
 		echo 'ok';
 	}else{

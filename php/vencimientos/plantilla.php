@@ -108,8 +108,8 @@ function reporteAceite($cadena, $esclavo){
 	?>
 	<div class="row">
 		<div class="col">
-			<button class="btn btn-secondary" data-toggle="modal" data-target="#modalInsertarHodometro">Agregar Actualización KM</button>
-			<button class="btn btn-secondary" data-toggle="modal" data-target="#modalInsertarMantenimiento">Agregar Mantenimiento KM/Hora</button>
+			<button class="btn btn-secondary" onclick="abrirModalInsertarMantenimiento('actualizacion')">Agregar Actualización KM</button>
+			<button class="btn btn-secondary" onclick="abrirModalInsertarMantenimiento('mantenimiento')">Agregar Mantenimiento KM/Hora</button>
 		</div>
 	</div>
 	<table class="table table-hover">
