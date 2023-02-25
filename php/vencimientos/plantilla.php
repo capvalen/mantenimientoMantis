@@ -106,6 +106,12 @@ function reporteAceite($cadena, $esclavo){
 	$i=1;
 	$hoy = new DateTime(date('Y-m-d'));
 	?>
+	<div class="row">
+		<div class="col">
+			<button class="btn btn-secondary" data-toggle="modal" data-target="#modalInsertarHodometro">Agregar Actualización KM</button>
+			<button class="btn btn-secondary" data-toggle="modal" data-target="#modalInsertarMantenimiento">Agregar Mantenimiento KM/Hora</button>
+		</div>
+	</div>
 	<table class="table table-hover">
 		<thead>
 				<th>N°</th>
@@ -127,13 +133,13 @@ function reporteAceite($cadena, $esclavo){
 			<?php
 			while($rowAceite = $resultadoAceite->fetch_assoc()){
 			?>
-			<tr>
+			<tr id="<?= $rowAceite['idPlaca'] ?>">
 				<td><?= $i;?></td>
 				<td><?= $rowAceite['movilidad'];?> <?= $rowAceite['placSerie'];?></td>
-				<td><?= $rowAceite['fActualizacionLatam'];?></td>
-				<td><?= $rowAceite['horometro'];?> <?= $rowAceite['queTipo'];?> </td>
-				<td><?= $rowAceite['fMantenimientoLatam'];?></td>
-				<td><?= $rowAceite['kilometraje'];?> <?= $rowAceite['queTipo'];?> </td>
+				<td class="tdFecha1" data-value="<?= $rowAceite['fActualizacion'];?>"><?= $rowAceite['fActualizacionLatam'];?></td>
+				<td class="tdHorometro" data-value="<?= $rowAceite['horometro'];?>"><?= $rowAceite['horometro'];?> <?= $rowAceite['queTipo'];?> </td>
+				<td class="tdFecha2" data-value="<?= $rowAceite['fMantenimiento'];?>"><?= $rowAceite['fMantenimientoLatam'];?></td>
+				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>"><?= $rowAceite['kilometraje'];?> <?= $rowAceite['queTipo'];?> </td>
 				<td><?= $rowAceite['rango'];?></td>
 				<?php $proximo = $rowAceite['kilometraje'] +$rowAceite['rango']; ?>
 				<td><?= $proximo;?></td>
