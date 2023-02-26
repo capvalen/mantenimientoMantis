@@ -159,10 +159,10 @@ if( !isset($_COOKIE['ckPower']) ) {
       </div>
       <div class="modal-footer">
 				<div class="grupoHoro">
-					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar</button>
+					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar actualización</button>
 				</div>
 				<div class="grupoActual">
-					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoActual()"><i class="bi bi-save"></i> Insertar</button>
+					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoActual()"><i class="bi bi-save"></i> Insertar mantenimiento</button>
 				</div>
       </div>
     </div>
@@ -208,7 +208,16 @@ if( !isset($_COOKIE['ckPower']) ) {
 					})
 				});
 				break;
-		
+			case 'caja':
+				fetch('php/vencimientos/plantilla.php',{
+					method:'POST', body:datos
+				}).then(resp=>{
+					resp.text()
+					.then(data=>{ //console.log(data);
+						document.querySelector('#caja .resultado').innerHTML=data;
+					})
+				});
+				break;
 			default:
 				break;
 		}
@@ -239,36 +248,39 @@ if( !isset($_COOKIE['ckPower']) ) {
 			.then(resp =>{
 				cambiarPlantilla('soat');
 			})
-
 		}
 	}
-	function abrirModalInsertarMantenimiento(tipo){
+	function abrirModalInsertarMantenimiento(tipo, idPlaca){
 		queTipo = tipo;
 		if(tipo == 'actualizacion'){
 			$('#modalInsertarHodometro .modal-title').text('Actualización de KM')
-			//$('.grupoHoro').removeClass('d-none')
-			//$('.grupoActual').addClass('d-none')
+			$('.grupoHoro').removeClass('d-none')
+			$('.grupoActual').addClass('d-none')
 		}else{
 			$('#modalInsertarHodometro .modal-title').text('Agregar mantenimiento de KM/hora')
-			//$('.grupoHoro').addClass('d-none')
-			//$('.grupoActual').removeClass('d-none')
+			$('.grupoHoro').addClass('d-none')
+			$('.grupoActual').removeClass('d-none')
 		}
+		$('#sltPlacaHoroEdit').selectpicker('val', idPlaca)
+		cambiarValores()
 		$('#modalInsertarHodometro').modal('show')
 	}
 	$('#sltPlacaHoroEdit').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 		if(clickedIndex != undefined){
-			let idNuevo = $('#sltPlacaHoroEdit').selectpicker('val');
-			console.log('id', idNuevo);
-			$('#txtHoroEdit').val($('#'+idNuevo+' .tdHorometro').data('value'))
-			$('#txtOdoAntEdit').val($('#'+idNuevo+' .tdActual').data('value'))
-			if(queTipo == 'actualizacion'){
-				$('#txtFechaActualEdit').val($('#'+idNuevo+' .tdFecha2').data('value'))
-			}else{
-				$('#txtFechaHoroEdit').val($('#'+idNuevo+' .tdFecha1').data('value'))
-
-			}
+			cambiarValores();
 		}
 	});
+	function cambiarValores(){
+		let idNuevo = $('#sltPlacaHoroEdit').selectpicker('val');
+		//console.log('id', idNuevo);
+		$('#txtHoroEdit').val($('#'+idNuevo+' .tdHorometro').data('value'))
+		$('#txtOdoAntEdit').val($('#'+idNuevo+' .tdActual').data('value'))
+		if(queTipo == 'actualizacion'){
+			$('#txtFechaActualEdit').val($('#'+idNuevo+' .tdFecha2').data('value'))
+		}else{
+			$('#txtFechaHoroEdit').val($('#'+idNuevo+' .tdFecha1').data('value'))
+		}
+	}
 	function insertarMantenimientoHoro(){
 		if($('#sltPlacaHoroEdit').selectpicker('val')==null){
 			$('#modalInsertarHodometro #errorMensaje').text('La placa esta vacía');
