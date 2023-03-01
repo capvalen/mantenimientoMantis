@@ -4,7 +4,7 @@ include "./../conexion.php";
 switch ($_POST['tipo']) {
 	case 'soat': reporteSoat($cadena); break;
 	case 'aceite': reporteAceite($cadena); break;
-	case 'caja': reporteCaja($cadena); break;
+	case 'caja': reporteCaja($cadena, $esclavo); break;
 	
 	default:
 		# code...
@@ -176,21 +176,39 @@ function reporteAceite($cadena){
 	</table>
 	<?php
 }
-function reporteCaja($cadena){
-	$sql="SELECT masReciente(idPlaca) as idAceite FROM `placas` where placActivo = 1;";
+function reporteCaja($cadena, $esclavo){
+	$sql="SELECT idPlaca from  `aceite`
+	group by idPlaca";
 	$resultado = $cadena->query($sql);
 	$placas = '';
 	while($row = $resultado->fetch_assoc()){
-		if($row['idAceite']<>'0') $placas .= $row['idAceite']. ',';
+		if($row['idPlaca']<>'0') $placas .= $row['idPlaca']. ',';
 	}
 	$placas = substr($placas, 0, -1);
+	//echo $placas; die();
+
+
+	/* $sqlCaja="SELECT masRecienteCaja(idPlaca) as idCaja FROM `placas` where placActivo = 1;";
+	$resultadoCaja = $esclavo->query($sqlCaja);
+	$placasCaja = '';
+	while($rowCaja = $resultadoCaja->fetch_assoc()){
+		if($rowCaja['idCaja']<>'0') $placasCaja .= $rowCaja['idCaja']. ',';
+	}
+	$placasCaja = substr($placasCaja, 0, -1);
+	echo $placasCaja; */
 	
-	$sqlCaja = "SELECT c.`id`, c.`idPlaca`, a.`fActualizacion`, a.`horometro`, c.`observacion`, a.`tipo`, c.registro, p.rango2, p.porcentajeAviso2, movilidad, placSerie, case a.tipo when 1 then 'km' when 2 then 'horas' end as queTipo, date_format(a.fActualizacion, '%d/%m/%Y') as fActualizacionLatam, fechaRecienteCaja(c.idPlaca) as fechaRecienteCaja, horometroRecienteCaja(c.idPlaca) as horometroRecienteCaja
-	FROM `caja` c
-	inner join placas p on c.idPlaca = p.idPlaca
-	inner join aceite a on a.idPlaca = p.idPlaca
-	where a.id in ({$placas});";
-	//echo $sqlCaja;die();
+	// fechaRecienteCaja(c.idPlaca) as fechaRecienteCaja, horometroRecienteCaja(c.idPlaca) as horometroRecienteCaja
+	
+	$sqlCaja = "SELECT c.`id`, c.`idPlaca`, c.`observacion`,  c.registro, c.fActualizacion as fechaRecienteCaja, c.horometro as horometroRecienteCaja,
+	subQuery.fActualizacion, subQuery.horometro, rango2, fActualizacionLatam, placSerie
+	from caja c, 
+	( 
+		SELECT  a.`fActualizacion`, a.`horometro`,p.rango2, p.porcentajeAviso2, movilidad, placSerie, case a.tipo when 1 then 'km' when 2 then 'horas' end as queTipo, date_format(a.fActualizacion, '%d/%m/%Y') as fActualizacionLatam, a.`tipo`
+		FROM placas p
+		join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ($placas) order by a.registro desc limit 1
+	) as subQuery
+	order by c.registro desc limit 1;";
+	echo $sqlCaja;die();
 	
 	$resultadoAceite = $cadena->query($sqlCaja);
 	
@@ -240,23 +258,21 @@ function reporteCaja($cadena){
 						<td class="bg-warning " style="white-space:nowrap">Programar Mantenimiento</td>
 				<?php endif;
 					endif?>
-				<td ><?= $rowCaja['fActualizacion'];?></td>
-				<td ><?= $rowCaja['horometro'];?></td>
+				<td ><?= $rowCaja['fActualizacionLatam'];?></td>
+				<td ><?= $rowCaja['horometro'];?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $fUltimaCaja->format('d/m/Y');?></td>
-				<td ><?= $rowCaja['horometroRecienteCaja'];?></td>
+				<td ><?= $rowCaja['horometroRecienteCaja'];?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['rango2'];?></td>
-				<td ><?= $proximo;?></td>
-				<td ><?= $restante;?></td>
+				<td ><?= $proximo;?> <?= $rowCaja['queTipo'];?></td>
+				<td ><?= $restante;?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['porcentajeAviso2'];?></td>
 				<td ><?= $aviso;?></td>
 				<td ><?= $rowCaja['observacion'];?></td>
 
 				<td style="white-space:nowrap"><?= $rowCaja['observacion'];?></td>
 				<td style="white-space:nowrap">
-					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarMantenimiento('actualizacion', <?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
-					<button class="btn btn-outline-success mx-1" onclick="abrirModalInsertarMantenimiento('mantenimiento', <?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Mantenimiento</button>
+					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
 				</td>
-				
 			</tr>
 			<?php
 			$i++; }

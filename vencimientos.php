@@ -95,6 +95,79 @@ if( !isset($_COOKIE['ckPower']) ) {
   </div>
 </div>
 
+<!-- Modal para: Insertar Aceite -->
+<div class="modal fade" id="modalInsertarAceite" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Insertar Mantenimiento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<p>Rellene los campos básicos:</p>
+				<div class="form-group row ">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Placa:</label>
+					<div class="col-sm-8">
+					<select class="selectpicker" data-live-search="true" id="sltPlacaHoroEdit" title="&#xed11; Placas disponibles" >
+						<?php include 'php/optPlacas.php'; ?>
+					</select>
+					</div>
+				</div>
+				<div class="form-group row grupoHoro">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
+					<div class="col-sm-8">
+						<input type="date" class="form-control" id="txtFechaHoroEdit">
+					</div>
+				</div>
+				<div class="form-group row grupoHoro">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Horómetro / Odómetro actual:</label>
+					<div class="col-sm-8">
+						<input type="number" class="form-control" id="txtHoroEdit">
+					</div>
+				</div>
+				<div class="form-group row grupoActual">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
+					<div class="col-sm-8">
+						<input type="date" class="form-control" id="txtFechaActualEdit">
+					</div>
+				</div>
+				<div class="form-group row grupoActual">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Odómetro actual:</label>
+					<div class="col-sm-8">
+						<input type="number" class="form-control" id="txtOdoAntEdit">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Tipo:</label>
+					<div class="col-sm-8">
+					<select class="selectpicker" data-live-search="true" id="sltTipo1" title="&#xed11; Tipo" >
+						<option value="1">K.m.</option>
+						<option value="2">Horas</option>
+					</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Observaciones:</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="txtObservacionEdit">
+					</div>
+				</div>
+				
+				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
+      </div>
+      <div class="modal-footer">
+				<div class="grupoHoro">
+					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar actualización</button>
+				</div>
+				<div class="grupoActual">
+					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoActual()"><i class="bi bi-save"></i> Insertar mantenimiento</button>
+				</div>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal para: Insertar Hodometro -->
 <div class="modal fade" id="modalInsertarHodometro" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
@@ -168,6 +241,57 @@ if( !isset($_COOKIE['ckPower']) ) {
     </div>
   </div>
 </div>
+
+<!-- Modal para: Insertar Caja -->
+<div class="modal fade" id="modalInsertarCaja" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Insertar Actualización de Caja</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+				<p>Rellene los campos básicos:</p>
+				<div class="form-group row ">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Placa:</label>
+					<div class="col-sm-8">
+					<select class="selectpicker" data-live-search="true" id="sltPlacCaja" title="&#xed11; Placas disponibles" >
+						<?php include 'php/optPlacas.php'; ?>
+					</select>
+					</div>
+				</div>
+				<div class="form-group row ">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
+					<div class="col-sm-8">
+						<input type="date" class="form-control" id="txtFechaCaja">
+					</div>
+				</div>
+				<div class="form-group row grupoHoro">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Horómetro / Odómetro actual:</label>
+					<div class="col-sm-8">
+						<input type="number" class="form-control" id="txtHoroCaja">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="staticEmail" class="col-sm-4 col-form-label">Observaciones:</label>
+					<div class="col-sm-8">
+						<input type="text" class="form-control" id="txtObservacionCaja">
+					</div>
+				</div>
+				
+				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
+      </div>
+      <div class="modal-footer">
+				<div class="">
+					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoCaja()"><i class="bi bi-save"></i> Insertar actualización</button>
+				</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 	
 <?php include 'php/modal.php'; ?>
@@ -270,6 +394,11 @@ if( !isset($_COOKIE['ckPower']) ) {
 			cambiarValores();
 		}
 	});
+	function abrirModalInsertarCaja(idPlaca){
+		$('#sltPlacCaja').selectpicker('val', idPlaca)
+		$('#txtFechaCaja').val(moment().format("YYYY-MM-DD"))
+		$('#modalInsertarCaja').modal('show')
+	}
 	function cambiarValores(){
 		let idNuevo = $('#sltPlacaHoroEdit').selectpicker('val');
 		//console.log('id', idNuevo);
@@ -336,6 +465,37 @@ if( !isset($_COOKIE['ckPower']) ) {
 					$('#modalInsertarHodometro').modal('hide');
 					cambiarPlantilla('aceite');
 					limpiarCamposInsert()
+				}
+			})
+		}
+	}
+	function insertarMantenimientoCaja(){
+	/* 	sltPlacCaja
+txtFechaCaja
+txtHoroCaja
+txtObservacionCaja */
+		if($('#sltPlacCaja').selectpicker('val')==null){
+			$('#modalInsertarCaja #errorMensaje').text('La placa esta vacía');
+			$('#modalInsertarCaja .pError').removeClass('d-none')
+		}else if( $('#txtHoroCaja').val()=='' ){
+			$('#modalInsertarCaja #errorMensaje').text('El valor de Hodómetro no puede estar vacío');
+			$('#modalInsertarCaja .pError').removeClass('d-none')
+		}else{
+			console.log('aca');
+			let datos = new FormData();
+			datos.append('tipo', 'horometro');
+			datos.append('idPlaca', $('#sltPlacCaja').selectpicker('val') );
+			datos.append('fecha', $('#txtFechaCaja').val() );
+			datos.append('horometro', $('#txtHoroCaja').val() );
+			datos.append('observacion', $('#txtObservacionCaja').val() );
+			fetch('php/vencimientos/insertarCaja.php', {
+				method:'POST', body:datos
+			})
+			.then(response => response.text())
+			.then(respuesta => {
+				if(respuesta=='ok'){
+					$('#modalInsertarCaja').modal('hide');
+					cambiarPlantilla('caja');
 				}
 			})
 		}
