@@ -199,7 +199,7 @@ function reporteCaja($cadena, $esclavo){
 	
 	// fechaRecienteCaja(c.idPlaca) as fechaRecienteCaja, horometroRecienteCaja(c.idPlaca) as horometroRecienteCaja
 	
-	$sqlCaja = "SELECT c.`id`, c.`idPlaca`, c.`observacion`,  c.registro, c.fActualizacion as fechaRecienteCaja, c.horometro as horometroRecienteCaja,
+	/*SELECT c.`id`, c.`idPlaca`, c.`observacion`,  c.registro, c.fActualizacion as fechaRecienteCaja, c.horometro as horometroRecienteCaja,
 	subQuery.fActualizacion, subQuery.horometro, rango2, fActualizacionLatam, placSerie
 	from caja c, 
 	( 
@@ -207,8 +207,9 @@ function reporteCaja($cadena, $esclavo){
 		FROM placas p
 		join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ($placas) order by a.registro desc limit 1
 	) as subQuery
-	order by c.registro desc limit 1;";
-	echo $sqlCaja;die();
+	order by c.registro desc limit 1;*/
+	$sqlCaja = "SELECT a.idPlaca, a.`fActualizacion`, horometroAnterior(a.idPlaca) as horometroAnterior,p.rango2, p.porcentajeAviso2, movilidad, placSerie, case a.tipo when 1 then 'km' when 2 then 'horas' end as queTipo, fechaAnterior(a.idPlaca) as fechaAnterior, a.`tipo`, horometroRecienteCaja(a.idPlaca) as horometroReciente, fechaRecienteCaja(a.idPlaca) as fechaReciente, observacionRecienteCaja(a.idPlaca) as observacionReciente FROM placas p join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ({$placas}) group by a.idPlaca";
+	//echo $sqlCaja;die();
 	
 	$resultadoAceite = $cadena->query($sqlCaja);
 	
@@ -241,9 +242,10 @@ function reporteCaja($cadena, $esclavo){
 		<tbody>
 			<?php
 			while($rowCaja = $resultadoAceite->fetch_assoc()){
-				$fUltimaCaja =new DateTime($rowCaja['fechaRecienteCaja']);
-				$proximo = $rowCaja['horometroRecienteCaja'] +$rowCaja['rango2'];
-				$restante = $proximo - $rowCaja['horometro'] ;
+				$fUltimaCaja =new DateTime($rowCaja['fechaReciente']);
+				$fAnterior =new DateTime($rowCaja['fechaAnterior']);
+				$proximo = $rowCaja['horometroReciente'] +$rowCaja['rango2'];
+				$restante = $proximo - $rowCaja['horometroAnterior'] ;
 				$aviso = $rowCaja['rango2'] * $rowCaja['porcentajeAviso2']/100;
 			?>
 			<tr id="<?= $rowCaja['idPlaca'] ?>">
@@ -258,18 +260,17 @@ function reporteCaja($cadena, $esclavo){
 						<td class="bg-warning " style="white-space:nowrap">Programar Mantenimiento</td>
 				<?php endif;
 					endif?>
-				<td ><?= $rowCaja['fActualizacionLatam'];?></td>
-				<td ><?= $rowCaja['horometro'];?> <?= $rowCaja['queTipo'];?></td>
+				<td ><?= $fAnterior->format('d/m/Y');?></td>
+				<td ><?= $rowCaja['horometroAnterior'];?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $fUltimaCaja->format('d/m/Y');?></td>
-				<td ><?= $rowCaja['horometroRecienteCaja'];?> <?= $rowCaja['queTipo'];?></td>
+				<td ><?= $rowCaja['horometroReciente'];?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['rango2'];?></td>
 				<td ><?= $proximo;?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $restante;?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['porcentajeAviso2'];?></td>
 				<td ><?= $aviso;?></td>
-				<td ><?= $rowCaja['observacion'];?></td>
 
-				<td style="white-space:nowrap"><?= $rowCaja['observacion'];?></td>
+				<td style="white-space:nowrap"><?= $rowCaja['observacionReciente'];?></td>
 				<td style="white-space:nowrap">
 					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
 				</td>
