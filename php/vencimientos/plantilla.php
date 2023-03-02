@@ -46,8 +46,10 @@ function reporteSoat($cadena){
 				<td><?= $row['ano']?></td>
 				<td class="tdSoat" data-value="<?= $row['vencimientoSoat']?>"><?= $row['vencimientoSoatLatam']?></td>
 				<?php if( $row['vencimientoSoat']<>''): ?>
-					<?php if( $intervaloSoat >0): ?>
+					<?php if( $intervaloSoat >5): ?>
 						<td class="bg-success text-light"><?= 'Faltan '. abs($intervaloSoat) . ' días' ?></td>
+					<?php elseif($intervaloSoat>0): ?>
+						<td class="bg-warning text-light"><?= 'Faltan '. abs($intervaloSoat) . ' días' ?></td>
 					<?php else: ?>
 						<td class="bg-danger text-light"><?= 'Vencido hace '. abs($intervaloSoat) . ' días' ?></td>
 					<?php endif; ?>
@@ -106,12 +108,12 @@ function reporteAceite($cadena){
 	
 	$i=1;
 	?>
-	<div class="row d-none">
+	<!-- <div class="row d-none">
 		<div class="col">
 			<button class="btn btn-secondary" onclick="abrirModalInsertarMantenimiento('actualizacion')">Agregar Actualización KM</button>
 			<button class="btn btn-secondary" onclick="abrirModalInsertarMantenimiento('mantenimiento')">Agregar Mantenimiento KM/Hora</button>
 		</div>
-	</div>
+	</div> -->
 	<table class="table table-hover">
 		<thead>
 				<th>N°</th>
@@ -135,10 +137,20 @@ function reporteAceite($cadena){
 				$proximo = $rowAceite['kilometraje'] +$rowAceite['rango'];
 				$restante = $proximo - $rowAceite['horometro'] ;
 				$aviso = $rowAceite['rango'] * $rowAceite['porcentajeAviso']/100;
+				$color='';
+				if ( $restante >= $aviso ){
+					$color='';
+				}else{
+					if($restante<0){
+						$color='bg-danger text-light';
+					}else{
+						$color='bg-warning';
+					}
+				}
 			?>
-			<tr id="<?= $rowAceite['idPlaca'] ?>">
+			<tr class="<?= $color;?>" id="<?= $rowAceite['idPlaca'] ?>">
 				<td><?= $i;?></td>
-				<td style="white-space:nowrap"><?= $rowAceite['movilidad'];?> <?= $rowAceite['placSerie'];?></td>
+				<td style="white-space:nowrap"> <?= $rowAceite['placSerie'];?></td>
 				<?php if(  $restante >= $aviso):?>
 					<td class="bg-success text-light">Operativo</td>
 				<?php else:
@@ -149,23 +161,25 @@ function reporteAceite($cadena){
 				<?php endif;
 					endif?>
 				<td class="tdFecha1" data-value="<?= $rowAceite['fActualizacion'];?>"><?= $rowAceite['fActualizacionLatam'];?></td>
-				<td class="tdHorometro" data-value="<?= $rowAceite['horometro'];?>"><?= $rowAceite['horometro'];?> <?= $rowAceite['queTipo'];?> </td>
+				<td class="tdHorometro" data-value="<?= $rowAceite['horometro'];?>"><?= number_format($rowAceite['horometro']);?> <?= $rowAceite['queTipo'];?> </td>
 				<td class="tdFecha2" data-value="<?= $rowAceite['fMantenimiento'];?>"><?= $rowAceite['fMantenimientoLatam'];?></td>
-				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>"><?= $rowAceite['kilometraje'];?> <?= $rowAceite['queTipo'];?> </td>
+				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>"><?= number_format($rowAceite['kilometraje']);?> <?= $rowAceite['queTipo'];?> </td>
 				<td><?= $rowAceite['rango'];?></td>
-				<td><?= $proximo;?></td>
+				<td><?= number_format($proximo);?></td>
 				<?php 
 					if($restante<0): ?>
-					<td class="bg-danger text-light"><?= $restante ?> <?= $rowAceite['queTipo'];?></td>
+					<td class="bg-danger text-light"><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
 				<?php else: ?>
-					<td class="bg-success text-light"><?= $restante ?> <?= $rowAceite['queTipo'];?></td>
+					<td class="bg-success text-light"><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
 				<?php endif;?>
 				<td><?= $rowAceite['porcentajeAviso'];?>%</td>
 				<td><?= $aviso ?></td>
 				<td style="white-space:nowrap"><?= $rowAceite['observacion'];?></td>
 				<td style="white-space:nowrap">
+				<?php if($_COOKIE['ckPower']==1): ?>
 					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarMantenimiento('actualizacion', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
 					<button class="btn btn-outline-success mx-1" onclick="abrirModalInsertarMantenimiento('mantenimiento', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Mantenimiento</button>
+					<?php endif; ?>
 				</td>
 				
 			</tr>
@@ -208,13 +222,12 @@ function reporteCaja($cadena, $esclavo){
 		join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ($placas) order by a.registro desc limit 1
 	) as subQuery
 	order by c.registro desc limit 1;*/
-	$sqlCaja = "SELECT a.idPlaca, a.`fActualizacion`, horometroAnterior(a.idPlaca) as horometroAnterior,p.rango2, p.porcentajeAviso2, movilidad, placSerie, case a.tipo when 1 then 'km' when 2 then 'horas' end as queTipo, fechaAnterior(a.idPlaca) as fechaAnterior, a.`tipo`, horometroRecienteCaja(a.idPlaca) as horometroReciente, fechaRecienteCaja(a.idPlaca) as fechaReciente, observacionRecienteCaja(a.idPlaca) as observacionReciente FROM placas p join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ({$placas}) group by a.idPlaca";
+	$sqlCaja = "SELECT a.idPlaca, a.`fActualizacion`, horometroAnterior(a.idPlaca) as horometroAnterior,p.rango2, p.porcentajeAviso2, movilidad, placSerie, case queKilo(a.idPlaca) when 1 then 'km' when 2 then 'horas' end as queTipo, fechaAnterior(a.idPlaca) as fechaAnterior, queKilo(a.idPlaca) as `tipo`, horometroRecienteCaja(a.idPlaca) as horometroReciente, fechaRecienteCaja(a.idPlaca) as fechaReciente, observacionRecienteCaja(a.idPlaca) as observacionReciente FROM placas p join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ({$placas}) group by a.idPlaca;";
 	//echo $sqlCaja;die();
 	
 	$resultadoAceite = $cadena->query($sqlCaja);
 	
 	$i=1;
-	$hoy = new DateTime(date('Y-m-d'));
 	?>
 	<div class="row d-none">
 		<div class="col">
@@ -247,10 +260,20 @@ function reporteCaja($cadena, $esclavo){
 				$proximo = $rowCaja['horometroReciente'] +$rowCaja['rango2'];
 				$restante = $proximo - $rowCaja['horometroAnterior'] ;
 				$aviso = $rowCaja['rango2'] * $rowCaja['porcentajeAviso2']/100;
+				$color='';
+				if ( $restante >= $aviso ){
+					$color='';
+				}else{
+					if($restante<0){
+						$color='bg-danger text-light';
+					}else{
+						$color='bg-warning';
+					}
+				}
 			?>
-			<tr id="<?= $rowCaja['idPlaca'] ?>">
+			<tr class="<?= $color;?>" id="<?= $rowCaja['idPlaca'] ?>">
 				<td><?= $i;?></td>
-				<td style="white-space:nowrap"><?= $rowCaja['movilidad'];?> <?= $rowCaja['placSerie'];?></td>
+				<td style="white-space:nowrap"> <?= $rowCaja['placSerie'];?></td>
 				<?php if(  $restante >= $aviso):?>
 					<td class="bg-success text-light">Operativo</td>
 				<?php else:
@@ -261,18 +284,25 @@ function reporteCaja($cadena, $esclavo){
 				<?php endif;
 					endif?>
 				<td ><?= $fAnterior->format('d/m/Y');?></td>
-				<td ><?= $rowCaja['horometroAnterior'];?> <?= $rowCaja['queTipo'];?></td>
+				<td ><?= number_format($rowCaja['horometroAnterior']);?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $fUltimaCaja->format('d/m/Y');?></td>
-				<td ><?= $rowCaja['horometroReciente'];?> <?= $rowCaja['queTipo'];?></td>
+				<td ><?= number_format($rowCaja['horometroReciente']);?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['rango2'];?></td>
-				<td ><?= $proximo;?> <?= $rowCaja['queTipo'];?></td>
-				<td ><?= $restante;?> <?= $rowCaja['queTipo'];?></td>
+				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowCaja['queTipo'];?></td>
+				<?php 
+					if($restante<0): ?>
+					<td class="bg-danger text-light" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
+				<?php else: ?>
+					<td class="bg-success text-light" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
+				<?php endif;?>
 				<td ><?= $rowCaja['porcentajeAviso2'];?></td>
 				<td ><?= $aviso;?></td>
 
 				<td style="white-space:nowrap"><?= $rowCaja['observacionReciente'];?></td>
 				<td style="white-space:nowrap">
+				<?php if($_COOKIE['ckPower']==1): ?>
 					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
+				<?php endif; ?>
 				</td>
 			</tr>
 			<?php

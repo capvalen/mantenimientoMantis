@@ -82,7 +82,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 <?php if( $_COOKIE['ckPower']==1){ ?>
 <!-- Modal para: agregar una placa -->
 <div class="modal fade" id="modalAddPlaca" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Agregar Placa</h5>
@@ -106,17 +106,21 @@ if( !isset($_COOKIE['ckPower']) ) {
 				
 				<table class=" table table-hover">
 				<thead>
-				<tr><th>N°</th>
-				<th>Movilidad</th>
-				<th>Placa</th>
-				<th>@</th></tr>
+					<tr><th>N°</th>
+					<th>Movilidad</th>
+					<th>Placa</th>
+					<th>Año</th>
+					<th>Rango (Aceite)</th>
+					<th>Porcentaje de aviso (Aceite)</th>
+					<th>Rango (Caja)</th>
+					<th>Porcentaje de aviso (Caja)</th>
+					<th>@</th></tr>
 				</thead>
-				<tbody>
-				<?php include "php/listarPlacas.php"; ?>
-				</tbody>
+					<tbody>
+						<?php include "php/listarPlacas.php"; ?>
+					</tbody>
 				</table>
       </div>
-      
     </div>
   </div>
 </div>
@@ -747,5 +751,28 @@ function subirFotoPlaca(){
 function abrirMantenimientoAutomatico(){
 	$('#sltPlacasMant').val( idGlobal ).selectpicker('render');
 	$('#modalAddMantenimiento').modal('show');
+}
+idIndex = -1; idPlacaAct = -1;
+function activarActualizacionBasicos(index, placa){
+	let fila = $('#modalAddPlaca tr').eq(index);
+	fila.find('.btnActualizar').removeClass('d-none')
+	idIndex = index;
+	idPlacaAct = placa;
+}
+function actualizarPlaca(){
+	let fila = $('#modalAddPlaca tr').eq(idIndex);
+	
+	let data = new FormData();
+	data.append('idPlaca', idPlacaAct )
+	data.append('ano', fila.find('.ano').val() )
+	data.append('rangoAceite', fila.find('.rangoAceite').val() )
+	data.append('porcentajeAceite', fila.find('.porcentajeAceite').val() )
+	data.append('rangoCaja', fila.find('.rangoCaja').val() )
+	data.append('porcentajeCaja', fila.find('.porcentajeCaja').val() )
+	fetch('php/actualizarPlacas.php',{
+		method:'POST', body:data
+	})
+	.then(response => response.text() )
+	.then(respuesta => fila.find('.btnActualizar').addClass('d-none') )
 }
 </script>

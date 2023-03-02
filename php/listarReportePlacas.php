@@ -28,8 +28,8 @@ if(!isset($_GET['placa'])){
 				<td class="tdTipoMant d-print-none" data-id="<?= $row['idTipoMantenimiento'];?>"><?= $row['tipmDescripcion']; ?></td>
 				<td class="tdDescipcion"><?= $row['mantDescipcion']; ?></td>
 				<td class="tdKilo"><?= $row['mantKilometraje']; ?></td>
-				<td class="text-capitalize tdLugar">
-					<span><?= $row['mantLugar']; ?></span>
+				<td class="text-capitalize ">
+					<span class="tdLugar"><?= $row['mantLugar']; ?></span>
 					<span class="d-print-flex d-none"><?= $row['mantResponsable']; ?></span>
 				</td>
 				<td class="text-capitalize d-print-none tdResponsable"><?= $row['mantResponsable']; ?></td>

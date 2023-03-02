@@ -31,7 +31,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 
 <?php include 'menu.php';?>
 <section>
-	<div class="row py-2">
+	<div class="container-fluid row py-2">
 		<div class="order-0 order-md-0 col-6 col-md-3 text-center">
 			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
 		<div class="order-2 order-md-1 col-12 col-md-6">
@@ -234,6 +234,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 		$('.selectpicker').selectpicker('val', -1);
 		$('#sltTipo1').selectpicker('val', 1);
 		$('#txtFechaHoroEdit').val( moment().format('YYYY-MM-DD') );
+		cambiarPlantilla('soat');
 	})
 
 	function cambiarPlantilla(tipo){
