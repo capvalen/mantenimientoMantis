@@ -102,7 +102,7 @@ function reporteAceite($cadena){
 	$sqlAceite = "SELECT a.`id`, a.`idPlaca`, a.`fActualizacion`, a.`horometro`, a.`fMantenimiento`, a.`kilometraje`, a.`observacion`, a.`tipo`, registro, p.rango, p.porcentajeAviso, movilidad, placSerie, case a.tipo when 1 then 'km' when 2 then 'horas' end as queTipo, date_format(fActualizacion, '%d/%m/%Y') as fActualizacionLatam, date_format(fMantenimiento, '%d/%m/%Y') as fMantenimientoLatam
 	FROM `aceite` a
 	inner join placas p on a.idPlaca = p.idPlaca
-	where a.id in ({$placas});";
+	where a.id in ({$placas}) and p.placActivo=1;";
 	
 	$resultadoAceite = $cadena->query($sqlAceite);
 	
@@ -167,7 +167,10 @@ function reporteAceite($cadena){
 				<td><?= $rowAceite['rango'];?></td>
 				<td><?= number_format($proximo);?></td>
 				<?php 
-					if($restante<0): ?>
+					if($color<>''):?>
+						<td class=""><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
+					<?php
+					elseif($restante<0): ?>
 					<td class="bg-danger text-light"><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
 				<?php else: ?>
 					<td class="bg-success text-light"><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
@@ -191,7 +194,9 @@ function reporteAceite($cadena){
 	<?php
 }
 function reporteCaja($cadena, $esclavo){
-	$sql="SELECT idPlaca from  `aceite`
+	$sql="SELECT a.idPlaca from  `aceite` a
+	inner join placas p on p.idPlaca = a.idPlaca
+	where p.placActivo = 1
 	group by idPlaca";
 	$resultado = $cadena->query($sql);
 	$placas = '';
