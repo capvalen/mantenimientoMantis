@@ -166,15 +166,7 @@ function reporteAceite($cadena){
 				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>"><?= number_format($rowAceite['kilometraje']);?> <?= $rowAceite['queTipo'];?> </td>
 				<td><?= $rowAceite['rango'];?></td>
 				<td><?= number_format($proximo);?></td>
-				<?php 
-					if($color<>''):?>
-						<td class=""><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
-					<?php
-					elseif($restante<0): ?>
-					<td class="bg-danger text-light"><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
-				<?php else: ?>
-					<td class="bg-success text-light"><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
-				<?php endif;?>
+				<td class="<?= $color==''? 'bg-success': $color;?>"><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
 				<td><?= $rowAceite['porcentajeAviso'];?>%</td>
 				<td><?= $aviso ?></td>
 				<td style="white-space:nowrap"><?= $rowAceite['observacion'];?></td>
@@ -294,12 +286,7 @@ function reporteCaja($cadena, $esclavo){
 				<td ><?= number_format($rowCaja['horometroReciente']);?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['rango2'];?></td>
 				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowCaja['queTipo'];?></td>
-				<?php 
-					if($restante<0): ?>
-					<td class="bg-danger text-light" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
-				<?php else: ?>
-					<td class="bg-success text-light" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
-				<?php endif;?>
+				<td class="<?= $color==''? 'bg-success': $color;?>" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['porcentajeAviso2'];?></td>
 				<td ><?= $aviso;?></td>
 
