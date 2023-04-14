@@ -36,8 +36,13 @@ if( !isset($_COOKIE['ckPower']) ) {
 			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
 		<div class="order-2 order-md-1 col-12 col-md-6">
 			<h3 class="text-center ">Registro de fechas de vencimiento</h3>
-			
+			<div class="input-group mb-3">
+				<input type="text" class="form-control" placeholder="Buscar por placa" id="txtBuscarPlaca">
+				<button class="btn btn-outline-secondary" type="button" onclick="buscarPlaca()" ><i class="bi bi-search"></i></button>
+				<button class="btn btn-outline-secondary" type="button" onclick="limbiarBusqueda()" ><i class="bi bi-eraser"></i></button>
+			</div>
 		</div>
+		
 	</div>
 </section>
 
@@ -437,6 +442,53 @@ txtObservacionCaja */
 		$('#txtOdoAntEdit').val('')
 		$('#txtObservacionEdit').val('')
 	}
+	txtBuscarPlaca = document.getElementById('txtBuscarPlaca')
+	document.querySelector('#txtBuscarPlaca').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+      buscarPlaca();
+    }
+});
+	function buscarPlaca(){
+		
+		let texto = txtBuscarPlaca.value;
+		let todo = document.querySelectorAll('.resultado tbody tr');
+		let filtro = ''
+		let arreglo = texto.toLowerCase().replace(' ','').split(',');
+
+		todo.forEach( campo=>{
+			
+
+			if(texto ==''){
+				campo.classList.remove('d-none')
+			}
+			filtro = campo.querySelectorAll('td')[1].innerText
+						
+			if(contains(filtro.toLowerCase(), arreglo)){
+				campo.classList.remove('d-none')
+			}else{
+				campo.classList.add('d-none')
+			}
+
+
+			/* if(filtro.toLowerCase().includes(texto.toLowerCase())){
+				campo.classList.remove('d-none')
+			}else{
+				campo.classList.add('d-none')
+			} */
+		})
+	}
+	function limbiarBusqueda(){
+		txtBuscarPlaca.value='';
+		buscarPlaca();
+	}
+	function contains(target, pattern){
+    var value = 0;
+    pattern.forEach(function(word){
+      value = value + target.includes(word);
+    });
+    return (value === 1)
+}
+
 </script>
 </body>
 </html>
