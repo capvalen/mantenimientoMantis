@@ -125,7 +125,7 @@ function reporteAceite($cadena){
 				<th>Vehículo - Placa</th>
 				<th>Estado</th>
 				<th>Fecha de Actualización KM</th>
-				<th>Horómetro / Odómetro actual</th>
+				<th>Horómetro/ Odómetro actual</th>
 				<th>Fecha Último Mantenimiento</th>
 				<th>Km / Horo Último Mantenimiento</th>
 				<th>Rango de mantenimiento</th>
@@ -169,8 +169,8 @@ function reporteAceite($cadena){
 				<td class="tdFecha1" data-value="<?= $rowAceite['fActualizacion'];?>"><?= $rowAceite['fActualizacionLatam'];?></td>
 				<td class="tdHorometro" data-value="<?= $rowAceite['horometro'];?>"><?= number_format($rowAceite['horometro']);?> <?= $rowAceite['queTipo'];?> </td>
 				<td class="tdFecha2" data-value="<?= $rowAceite['fMantenimiento'];?>"><?= $rowAceite['fMantenimientoLatam'];?></td>
-				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>"><?= number_format($rowAceite['kilometraje']);?> <?= $rowAceite['queTipo'];?> </td>
-				<td><?= number_format($rowAceite['rango']);?></td>
+				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>" style="white-space:nowrap"><?= number_format($rowAceite['kilometraje']);?> <?= $rowAceite['queTipo'];?> </td>
+				<td style="white-space:nowrap"><?= number_format($rowAceite['rango']);?> <?= $rowAceite['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowAceite['queTipo'];?></td>
 				<td class="<?= $color==''? 'bg-success': $color;?>" ><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
 				<td><?= $rowAceite['porcentajeAviso'];?>%</td>
@@ -291,7 +291,7 @@ function reporteCaja($cadena, $esclavo){
 				<td ><?= number_format($rowCaja['horometroAnterior']);?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $fUltimaCaja->format('d/m/Y');?></td>
 				<td ><?= number_format($rowCaja['horometroReciente']);?> <?= $rowCaja['queTipo'];?></td>
-				<td ><?= number_format($rowCaja['rango2']);?></td>
+				<td style="white-space:nowrap"><?= number_format($rowCaja['rango2']);?> <?= $rowCaja['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowCaja['queTipo'];?></td>
 				<td class="<?= $color==''? 'bg-success': $color;?>" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['porcentajeAviso2'];?>%</td>
