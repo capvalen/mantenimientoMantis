@@ -447,7 +447,7 @@ txtObservacionCaja */
     if (e.key === 'Enter') {
       buscarPlaca();
     }
-});
+	});
 	function buscarPlaca(){
 		
 		let texto = txtBuscarPlaca.value;
@@ -487,7 +487,7 @@ txtObservacionCaja */
       value = value + target.includes(word);
     });
     return (value === 1)
-}
+	}
 
 </script>
 </body>
