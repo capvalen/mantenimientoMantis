@@ -43,20 +43,20 @@ if( !isset($_COOKIE['ckPower']) ) {
 			<img src="" id="imgFoto" class="img-fluid w-75" onclick="modalFoto()" style="cursor:pointer;">
 		</div>
 	</div>
-	<?php if( $_COOKIE['ckPower']==1){ ?>
-		<div class="row">
-			<div class="col-sm-4">
+	<div class="row">
+		<div class="col-sm-4">
+				<?php if( $_COOKIE['ckPower']==1){ ?>
 				<button class="btn btn-outline-primary mb-3" onclick="abrirMantenimientoAutomatico()"><i class="bi bi-node-plus"></i>  Agregar mantenimiento</button>
+				<?php } ?>
 			</div>
 			<div class="col-sm-8">
 				<div class="input-group mb-3">
-					<input type="text" class="form-control" placeholder="Buscar por placa" id="txtBuscarPlaca">
+					<input type="text" class="form-control" placeholder="Buscar por descripción" id="txtBuscarPlaca">
 					<button class="btn btn-outline-secondary" type="button" onclick="buscarPlaca()" ><i class="bi bi-search"></i></button>
 					<button class="btn btn-outline-secondary" type="button" onclick="limbiarBusqueda()" ><i class="bi bi-eraser"></i></button>
 				</div>
 			</div>
 		</div>
-	<?php } ?>
 		
 
 	<div class="table-responsive">
