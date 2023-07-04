@@ -34,10 +34,10 @@ if(!isset($_GET['placa'])){
 				</td>
 				<td class="text-capitalize d-print-none tdResponsable"><?= $row['mantResponsable']; ?></td>
 				<td class="tdMonto"><?= $row['mantMonto']; ?></td>
-				<td class="d-print-none tdArchivo"><?php if(strlen($row['mantAdjunto'])>0){ ?>
+				<td class="d-print-none tdArchivo"><?php if(strlen($row['mantAdjunto'] ?? '')>0){ ?>
 					<a href="./files/<?= $row['mantAdjunto'];?>" download><i class="bi bi-file-arrow-down"></i></a> <?php }  ?>
 				</td>
-				<td class="d-print-none tdFactura"><?php if(strlen($row['mantFactura'])>0){ ?>
+				<td class="d-print-none tdFactura"><?php if(strlen($row['mantFactura'] ?? '')>0){ ?>
 					<a href="./facturas/<?= $row['mantFactura'];?>" download><i class="bi bi-file-arrow-down"></i></a> <?php }  ?>
 				</td>
 				

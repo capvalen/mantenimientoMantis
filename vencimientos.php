@@ -11,23 +11,13 @@ if( !isset($_COOKIE['ckPower']) ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Vencimientos - Transportes y Contratistas JKM SRL</title>
+	<link rel="shortcut icon" href="https://contratistasjkm.com/wp-content/uploads/2023/02/favic.png" type="image/x-icon">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="css/bootstrap-select.css">
 	<link rel="shortcut icon" href="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/favicon.png" />
 </head>
 <body>
-<style>
-.bootstrap-select .dropdown-toggle .filter-option{font-family:'Icofont', 'Segoe UI';}
-.bootstrap-select .dropdown-toggle .filter-option {
-    border: 1px solid #c5c5c5;
-    border-radius: .25rem;
-}
-.bg-dark{background-color:#0e0e0e!important}
-.bootstrap-select .dropdown-toggle .filter-option{
-	border: transparent!important;	
-}
-</style>
 
 <?php include 'menu.php';?>
 <section>
@@ -66,10 +56,31 @@ if( !isset($_COOKIE['ckPower']) ) {
 			<div class="resultado table-responsive"></div>
 		</div>
 		<div class="tab-pane fade" id="aceite" role="tabpanel" aria-labelledby="aceite-tab">
+			<div class="card my-3">
+				<div class="card-body">
+					<label for="">Filtros</label>
+					<button class="btn btn-sm btn-outline-success btnFiltros" onclick="activarFiltro('operativo')">Operativo</button>
+					<button class="btn btn-sm btn-outline-warning btnFiltros" onclick="activarFiltro('programar')">Programar mantenimiento</button>
+					<button class="btn btn-sm btn-outline-danger btnFiltros" onclick="activarFiltro('mantenimiento')">Mantenimiento urgente</button>
+					<button class="btn btn-sm btn-outline-primary btnFiltros" onclick="activarFiltro('pendiente')">Pendiente Actualizar Km/Hora</button>
+					<button class="btn btn-sm btn-outline-secondary btnFiltros" onclick="activarFiltro('limpiar')">Limpiar filtro</button>
+				</div>
+			</div>
 			<div class="resultado table-responsive"></div>
 		</div>
 		<div class="tab-pane fade" id="caja" role="tabpanel" aria-labelledby="caja-tab">
-			<div class="resultado table-responsive"></div>
+		<div class="card my-3">
+				<div class="card-body">
+					<label for="">Filtros</label>
+					<button class="btn btn-sm btn-outline-success btnFiltros" onclick="activarFiltroFiltro('operativo')">Operativo</button>
+					<button class="btn btn-sm btn-outline-warning btnFiltros" onclick="activarFiltroFiltro('programar')">Programar mantenimiento</button>
+					<button class="btn btn-sm btn-outline-danger btnFiltros" onclick="activarFiltroFiltro('mantenimiento')">Mantenimiento urgente</button>
+					<button class="btn btn-sm btn-outline-secondary btnFiltros" onclick="activarFiltroFiltro('limpiar')">Limpiar filtro</button>
+				</div>
+			</div>
+			<div class="resultado table-responsive">
+				<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> Cargando datos
+			</div>
 		</div>
 	</div>
 </section>
@@ -488,7 +499,134 @@ txtObservacionCaja */
     });
     return (value === 1)
 	}
+	function activarFiltro(tipo){
+		$('.btnFiltros').removeClass('active')
+		$(event.target).addClass('active')
+		let todo = document.querySelectorAll('#aceite .resultado tbody tr');
+		let fecha = null;
+		let hoy = moment();
+		switch (tipo) {
+			case 'operativo': $filtro = 'Operativo'; break;
+			case 'programar': $filtro = 'Programar Mantenimiento'; break;
+			case 'mantenimiento': $filtro = 'Mantenimiento Urgente'; break;
+			case 'pendiente': $filtro = ''; break;
+			case 'limpiar': break;
+			default:
+				break;
+		}
+		if(tipo!='limpiar' && tipo!='pendiente')
+			todo.forEach(campo =>{
+				if( campo.querySelectorAll('td')[2].innerText == $filtro ){
+					campo.classList.remove('d-none')
+				}else{
+					campo.classList.add('d-none')
+				}
+			})
+		else if( tipo=='pendiente')
+			todo.forEach(campo =>{
+				fecha = moment(campo.querySelectorAll('td')[3].dataset.value)
+				diferencia = hoy.diff(fecha, 'days');
+				//console.log(fecha.format('YYYY-MM-DD'), diferencia, campo.querySelectorAll('td')[3].dataset.value);
+				if( diferencia >= 7 ){
+					campo.classList.remove('d-none')
+				}else{
+					campo.classList.add('d-none')
+				}
+			})
+		else $('.resultado tbody tr').removeClass('d-none')
+	}
+	function activarFiltroFiltro(tipo){
+		$('.btnFiltros').removeClass('active')
+		$(event.target).addClass('active')
+		let todo = document.querySelectorAll('#caja .resultado tbody tr');
+		let fecha = null;
+		let hoy = moment();
+		switch (tipo) {
+			case 'operativo': $filtro = 'Operativo'; break;
+			case 'programar': $filtro = 'Programar Mantenimiento'; break;
+			case 'mantenimiento': $filtro = 'Mantenimiento Urgente'; break;
+			case 'pendiente': $filtro = ''; break;
+			case 'limpiar': break;
+			default:
+				break;
+		}
+		if(tipo!='limpiar' && tipo!='pendiente')
+			todo.forEach(campo =>{
+				if( campo.querySelectorAll('td')[2].innerText == $filtro ){
+					campo.classList.remove('d-none')
+				}else{
+					campo.classList.add('d-none')
+				}
+			})
+		else $('.resultado tbody tr').removeClass('d-none')
+	}
 
 </script>
+<style>
+.bootstrap-select .dropdown-toggle .filter-option{font-family:'Icofont', 'Segoe UI';}
+.bootstrap-select .dropdown-toggle .filter-option {
+    border: 1px solid #c5c5c5;
+    border-radius: .25rem;
+}
+.bg-dark{background-color:#0e0e0e!important}
+.bootstrap-select .dropdown-toggle .filter-option{
+	border: transparent!important;	
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 70px;
+  height: 30px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 23px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1319cf;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+</style>
 </body>
 </html>

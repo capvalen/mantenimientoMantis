@@ -32,9 +32,9 @@ function reporteSoat($cadena){
 		<tbody>
 			<?php
 			while($row = $resultado->fetch_assoc()){
-				$venceSoat = new DateTime($row['vencimientoSoat']);
-				$venceRT = new DateTime($row['vencimientoRT']);
-				$venceRCT = new DateTime($row['vencimientoRCT']);
+				$venceSoat = new DateTime($row['vencimientoSoat'] ?? '' );
+				$venceRT = new DateTime($row['vencimientoRT'] ?? '' );
+				$venceRCT = new DateTime($row['vencimientoRCT'] ?? '' );
 
 				$intervaloSoat = $hoy->diff($venceSoat)->format('%R%a');
 				$intervaloRT = $hoy->diff($venceRT)->format('%R%a');
