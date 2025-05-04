@@ -5,9 +5,7 @@ switch ($_POST['tipo']) {
 	case 'soat': reporteSoat($cadena); break;
 	case 'aceite': reporteAceite($cadena); break;
 	case 'caja': reporteCaja($cadena, $esclavo); break;
-	
-	default:
-		# code...
+	default: # code...
 		break;
 }
 
@@ -17,9 +15,9 @@ function reporteSoat($cadena){
 	$hoy = new DateTime(date('Y-m-d'));
 	?>
 	<table class="table table-hover">
-		<thead>
+		<thead class="text-center">
 				<th>N°</th>
-				<th>Vehículo - Placa</th>
+				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
 				<th>Año Fab.</th>
 				<th>Fecha Vencimiento SOAT</th>
 				<th>Alerta SOAT</th>
@@ -39,12 +37,13 @@ function reporteSoat($cadena){
 				$intervaloSoat = $hoy->diff($venceSoat)->format('%R%a');
 				$intervaloRT = $hoy->diff($venceRT)->format('%R%a');
 				$intervaloRCT = $hoy->diff($venceRCT)->format('%R%a');
+
 			?>
 			<tr>
 				<td><?= $i;?></td>
 				<td class="tdPlaca" data-value="<?= $row['placSerie']?>"><?= $row['placSerie']?></td>
 				<td><?= $row['ano']?></td>
-				<td class="tdSoat" data-value="<?= $row['vencimientoSoat']?>"><?= $row['vencimientoSoatLatam']?></td>
+				<td class="tdSoat text-right" data-value="<?= $row['vencimientoSoat']?>"><?= $row['vencimientoSoatLatam']?></td>
 				<?php if( $row['vencimientoSoat']<>''): ?>
 					<?php if( $intervaloSoat >10): ?>
 						<td class="bg-success text-light"><?= 'Faltan '. abs($intervaloSoat) . ' días' ?></td>
@@ -56,7 +55,7 @@ function reporteSoat($cadena){
 				<?php else: ?>
 					<td></td>
 				<?php endif; ?>
-				<td class="tdRT" data-value="<?= $row['vencimientoRT']?>"><?= $row['vencimientoRTLatam']?></td>
+				<td class="tdRT text-right" data-value="<?= $row['vencimientoRT']?>"><?= $row['vencimientoRTLatam']?></td>
 				<?php if( $row['vencimientoRT']<>''): ?>
 					<?php if( $intervaloRT >10): ?>
 						<td class="bg-success text-light"><?= 'Faltan '. abs($intervaloRT) . ' días' ?></td>
@@ -69,7 +68,7 @@ function reporteSoat($cadena){
 					<td></td>
 				<?php endif; ?>
 				
-				<td class="tdRCT" data-value="<?= $row['vencimientoRCT']?>"><?= $row['vencimientoRCTLatam']?></td>
+				<td class="tdRCT text-right" data-value="<?= $row['vencimientoRCT']?>"><?= $row['vencimientoRCTLatam']?></td>
 				<?php if( $row['vencimientoRCT']<>''): ?>
 					<?php if( $intervaloRCT >10): ?>
 						<td class="bg-success text-light"><?= 'Faltan '. abs($intervaloRCT) . ' días' ?></td>
@@ -120,9 +119,9 @@ function reporteAceite($cadena){
 		</div>
 	</div> -->
 	<table class="table table-hover">
-		<thead>
+		<thead class="text-center">
 				<th>N°</th>
-				<th>Vehículo - Placa</th>
+				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
 				<th>Estado</th>
 				<th>Fecha de Actualización KM</th>
 				<th>Horómetro/ Odómetro actual</th>
@@ -156,7 +155,7 @@ function reporteAceite($cadena){
 			?>
 			<tr class="<?= $color;?>" id="<?= $rowAceite['idPlaca'] ?>">
 				<td><?= $i;?></td>
-				<td style="white-space:nowrap"> <?= $rowAceite['placSerie'];?></td>
+				<td class="tdPlaca" data-value="<?= $rowAceite['placSerie']?>" style="white-space:nowrap"> <?= $rowAceite['placSerie'];?></td>
 				<?php if(  $restante >= $aviso):?>
 					<td class="bg-success text-light">Operativo</td>
 				<?php else:
@@ -172,7 +171,7 @@ function reporteAceite($cadena){
 				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>" style="white-space:nowrap"><?= number_format($rowAceite['kilometraje']);?> <?= $rowAceite['queTipo'];?> </td>
 				<td style="white-space:nowrap"><?= number_format($rowAceite['rango']);?> <?= $rowAceite['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowAceite['queTipo'];?></td>
-				<td class="<?= $color==''? 'bg-success': $color;?>" ><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
+				<td class="<?= $color==''? 'bg-success': '';?>" ><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
 				<td><?= $rowAceite['porcentajeAviso'];?>%</td>
 				<td><?= number_format($aviso) ?></td>
 				<td style="white-space:nowrap"><?= $rowAceite['observacion'];?></td>
@@ -199,37 +198,34 @@ function reporteCaja($cadena, $esclavo){
 	order by p.idPlaca asc;";
 	$resultado = $cadena->query($sql);
 	$placas = '';
+	$jPlacas = [];
+	$resultados = [];
+	$fila = [];
 	while($row = $resultado->fetch_assoc()){
-		if($row['idPlaca']<>'0') $placas .= $row['idPlaca']. ',';
+		if($row['idPlaca']<>'0'){
+			$placas .= $row['idPlaca']. ',';
+			$jPlacas[] = [
+				'idPlaca' => $row['idPlaca'],
+				'resultados' => [] // Puedes establecer un valor predeterminado aquí
+			];
+		}
 	}
 	$placas = substr($placas, 0, -1);
-	//echo $placas; die();
-
-
-	/* $sqlCaja="SELECT masRecienteCaja(idPlaca) as idCaja FROM `placas` where placActivo = 1;";
-	$resultadoCaja = $esclavo->query($sqlCaja);
-	$placasCaja = '';
-	while($rowCaja = $resultadoCaja->fetch_assoc()){
-		if($rowCaja['idCaja']<>'0') $placasCaja .= $rowCaja['idCaja']. ',';
+	//var_dump( $jPlacas); die();
+	
+	foreach($jPlacas as $key=> $placa){
+		$sqlCaja = "SELECT a.idPlaca, a.`fActualizacion`, horometroAnterior(a.idPlaca) as horometroAnterior,p.rango2, p.porcentajeAviso2, movilidad, placSerie, case queKilo(a.idPlaca) when 1 then 'km' when 2 then 'horas' end as queTipo, fechaAnterior(a.idPlaca) as fechaAnterior, queKilo(a.idPlaca) as `tipo`, horometroRecienteCaja(a.idPlaca) as horometroReciente, fechaRecienteCaja(a.idPlaca) as fechaReciente, observacionRecienteCaja(a.idPlaca) as observacionReciente FROM placas p join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ({$placa['idPlaca']}) group by a.idPlaca order by p.idPlaca asc;";
+		//echo $sqlCaja;
+		if($resultadoAceite = $esclavo->query($sqlCaja)){
+			while ($fila = $resultadoAceite->fetch_assoc()) {
+				//$jPlacas[$key]['resultado'] = $fila;
+				$resultados [] = $fila;
+   		}
+		}
 	}
-	$placasCaja = substr($placasCaja, 0, -1);
-	echo $placasCaja; */
+	//var_dump( $jPlacas); die();
+
 	
-	// fechaRecienteCaja(c.idPlaca) as fechaRecienteCaja, horometroRecienteCaja(c.idPlaca) as horometroRecienteCaja
-	
-	/*SELECT c.`id`, c.`idPlaca`, c.`observacion`,  c.registro, c.fActualizacion as fechaRecienteCaja, c.horometro as horometroRecienteCaja,
-	subQuery.fActualizacion, subQuery.horometro, rango2, fActualizacionLatam, placSerie
-	from caja c, 
-	( 
-		SELECT  a.`fActualizacion`, a.`horometro`,p.rango2, p.porcentajeAviso2, movilidad, placSerie, case a.tipo when 1 then 'km' when 2 then 'horas' end as queTipo, date_format(a.fActualizacion, '%d/%m/%Y') as fActualizacionLatam, a.`tipo`
-		FROM placas p
-		join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ($placas) order by a.registro desc limit 1
-	) as subQuery
-	order by c.registro desc limit 1;*/
-	$sqlCaja = "SELECT a.idPlaca, a.`fActualizacion`, horometroAnterior(a.idPlaca) as horometroAnterior,p.rango2, p.porcentajeAviso2, movilidad, placSerie, case queKilo(a.idPlaca) when 1 then 'km' when 2 then 'horas' end as queTipo, fechaAnterior(a.idPlaca) as fechaAnterior, queKilo(a.idPlaca) as `tipo`, horometroRecienteCaja(a.idPlaca) as horometroReciente, fechaRecienteCaja(a.idPlaca) as fechaReciente, observacionRecienteCaja(a.idPlaca) as observacionReciente FROM placas p join aceite a on a.idPlaca = p.idPlaca where a.idPlaca in ({$placas}) group by a.idPlaca order by p.idPlaca asc;";
-	//echo $sqlCaja;die();
-	
-	$resultadoAceite = $cadena->query($sqlCaja);
 	
 	$i=1;
 	?>
@@ -240,9 +236,9 @@ function reporteCaja($cadena, $esclavo){
 		</div>
 	</div>
 	<table class="table table-hover">
-		<thead>
+		<thead class="text-center">
 				<th>N°</th>
-				<th>Vehículo - Placa</th>
+				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
 				<th>Estado</th>
 				<th>Fecha de Actualización KM</th>
 				<th>Horómetro / Odómetro actual</th>
@@ -258,7 +254,7 @@ function reporteCaja($cadena, $esclavo){
 		</thead>
 		<tbody>
 			<?php
-			while($rowCaja = $resultadoAceite->fetch_assoc()){
+			foreach( $resultados as $rowCaja ){
 				$fUltimaCaja =new DateTime($rowCaja['fechaReciente']);
 				$fAnterior =new DateTime($rowCaja['fechaAnterior']);
 				$proximo = $rowCaja['horometroReciente'] +$rowCaja['rango2'];
@@ -277,7 +273,7 @@ function reporteCaja($cadena, $esclavo){
 			?>
 			<tr class="<?= $color;?>" id="<?= $rowCaja['idPlaca'] ?>">
 				<td><?= $i;?></td>
-				<td style="white-space:nowrap"> <?= $rowCaja['placSerie'];?></td>
+				<td class="tdPlaca" data-value="<?= $rowCaja['placSerie']?>" style="white-space:nowrap"> <?= $rowCaja['placSerie'];?></td>
 				<?php if(  $restante >= $aviso):?>
 					<td class="bg-success text-light">Operativo</td>
 				<?php else:
@@ -293,7 +289,7 @@ function reporteCaja($cadena, $esclavo){
 				<td ><?= number_format($rowCaja['horometroReciente']);?> <?= $rowCaja['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($rowCaja['rango2']);?> <?= $rowCaja['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowCaja['queTipo'];?></td>
-				<td class="<?= $color==''? 'bg-success': $color;?>" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
+				<td class="<?= $color==''? 'bg-success': '';?>" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
 				<td ><?= $rowCaja['porcentajeAviso2'];?>%</td>
 				<td ><?= number_format($aviso);?></td>
 

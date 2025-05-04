@@ -61,9 +61,9 @@ if( !isset($_COOKIE['ckPower']) ) {
 		
 
 	<div class="table-responsive">
-		<table class="table table-hover">
+		<table class="table table-hover table-striped">
 			<thead>
-				<tr>
+				<tr class="text-center">
 					<th style="white-space: nowrap">N°</th>
 					<th>Fecha</th>
 					<th class="d-print-none">Tipo de Mantenimiento</th>
@@ -71,7 +71,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 					<th>Kilometraje</th>
 					<th>Lugar</th>
 					<th class="d-print-none">Responsable</th>
-					<th>Monto</th>
+					<th class="d-print-none">Monto</th>
 					<th class="d-print-none">Informe</th>
 					<th class="d-print-none">Factura</th>
 				</tr>
@@ -82,7 +82,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 		</table>
 	</div>
 	<?php }else{ ?>
-	<p>Empieze seleccionando una placa en la esquina superior derecha.</p>
+	<p>Empieze seleccionando una placa en la esquina superior derecha. <i class="bi bi-arrow-up-right"></i></p>
 	<?php } ?>
 </section>
 </div>

@@ -264,6 +264,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 					resp.text()
 					.then(data=>{ //console.log(data);
 						document.querySelector('#soat .resultado').innerHTML=data;
+						contarCajas(tipo);
 					})
 				});
 				break;
@@ -274,6 +275,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 					resp.text()
 					.then(data=>{ //console.log(data);
 						document.querySelector('#aceite .resultado').innerHTML=data;
+						contarCajas(tipo);
 					})
 				});
 				break;
@@ -284,11 +286,45 @@ if( !isset($_COOKIE['ckPower']) ) {
 					resp.text()
 					.then(data=>{ //console.log(data);
 						document.querySelector('#caja .resultado').innerHTML=data;
+						contarCajas(tipo);
 					})
 				});
 				break;
 			default:
 				break;
+		}
+	}
+	function contarCajas( tipo ){
+		console.log('version, 1.03')
+		const element = document.getElementById("divAlert");
+		if(element) element.remove()
+
+		placasAlertas = []
+		const trs = document.querySelectorAll('#'+ tipo +' tr')
+		trs.forEach( fila =>{
+			/* if( placasAlertas.includes(fila.querySelector('.tdPlaca').dataset.value) ) {
+				console.log('ya tiene')
+				return;} */
+			const celdas = fila.querySelectorAll('td')
+			celdas.forEach( columna => {
+				if(columna.classList.contains('bg-warning'))
+					placasAlertas.push( fila.querySelector('.tdPlaca').dataset.value )
+			})
+		})
+
+		console.info(placasAlertas)
+
+		if(placasAlertas.length>0){
+			const alertDiv = document.createElement("div");
+      alertDiv.className = "alert alert-warning alert-dismissible fade show mt-2";
+      alertDiv.id = "divAlert";
+      alertDiv.setAttribute("role", "alert");
+      alertDiv.innerHTML = `			
+        <strong>¡Alerta!</strong> Existen placas (${placasAlertas.length}) por vencer son: ${placasAlertas.join(',')}` ;
+      const caja = document.getElementById(tipo);
+      if (caja) {
+        caja.insertBefore(alertDiv, caja.firstChild);
+      }    
 		}
 	}
 	function editarSoat(indice, id){
