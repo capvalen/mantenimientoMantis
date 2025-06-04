@@ -5,6 +5,7 @@ switch ($_POST['tipo']) {
 	case 'soat': reporteSoat($cadena); break;
 	case 'aceite': reporteAceite($cadena); break;
 	case 'caja': reporteCaja($cadena, $esclavo); break;
+	case 'documentos': reporteDocumentos($cadena, $esclavo); break;
 	default: # code...
 		break;
 }
@@ -299,6 +300,93 @@ function reporteCaja($cadena, $esclavo){
 					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
 				<?php endif; ?>
 				</td>
+			</tr>
+			<?php
+			$i++; }
+			?>
+		</tbody>
+	</table>
+	<?php
+}
+
+function reporteDocumentos($cadena, $esclavo){
+	/* $sql="SELECT p.idPlaca, p.movilidad, p.placSerie, a.ruta,
+	a.tipo, a.registro, a.id as idArchivo
+	FROM `placas` p
+	left join  archivos a on p.idPlaca = a.idPlaca
+	and a.id = (
+	SELECT MAX(a2.id)
+			FROM archivos a2
+			WHERE a2.tipo = a.tipo
+			AND a2.activo = 1);"; */
+	$sql = "SELECT p.idPlaca, p.movilidad, p.placSerie
+		FROM `placas` p where p.placActivo = 1
+		order by p.idPlaca asc;";
+	$resultado = $cadena->query($sql); $i=1;	
+	?>
+	<table class="table table-hover">
+		<thead class="text-center">
+				<th>N°</th>
+				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
+				<th>SOAT</th>
+				<th>Revisión técnica</th>
+				<th>Póliza</th>
+				<th>Tarjeta de propiedad</th>				
+				<th>@</th>
+		</thead>
+		<tbody>
+			<?php
+			while($row = $resultado->fetch_assoc()){
+				$archivos = $esclavo->query("SELECT 
+						idPlaca,
+						MAX(CASE WHEN tipo = 'SOAT' THEN ruta ELSE NULL END) AS 'SOAT',
+						MAX(CASE WHEN tipo = 'Revisión' THEN ruta ELSE NULL END) AS 'Revisión',
+						MAX(CASE WHEN tipo = 'Póliza' THEN ruta ELSE NULL END) AS 'Póliza',
+						MAX(CASE WHEN tipo = 'Tarjeta' THEN ruta ELSE NULL END) AS 'Tarjeta'
+				FROM (
+						SELECT 
+								a.*,
+								ROW_NUMBER() OVER (PARTITION BY tipo ORDER BY id DESC) AS row_num
+						FROM archivos a
+						WHERE idPlaca = {$row['idPlaca']}
+				) AS RankedArchivos
+				WHERE row_num = 1
+				GROUP BY idPlaca;");
+				//SELECT * FROM `archivos` where idPlaca = {$row['idPlaca']}
+				
+			?>
+			<tr>
+				<td><?= $i;?></td>
+				<td class="tdPlaca" data-value="<?= $row['placSerie']?>"><?= $row['placSerie']?></td>
+				<?php
+				if($archivos->num_rows > 0):
+					while($rowArch = $archivos->fetch_assoc()){?>
+						<?php if($rowArch['SOAT']): ?>
+							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['SOAT'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>
+						<?php else: ?> <td>-</td> <?php endif; ?>
+						<?php if($rowArch['Revisión']): ?>
+							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['Revisión'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>							
+						<?php else: ?> <td>-</td> <?php endif; ?>
+						<?php if($rowArch['Póliza']): ?>
+							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['Póliza'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>
+						<?php else: ?> <td>-</td> <?php endif; ?>
+						<?php if($rowArch['Tarjeta']): ?>
+							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['Tarjeta'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>
+						<?php else: ?> <td>-</td> <?php endif; ?>
+					<?php } ?>
+					<?php
+				else: ?>
+				<td>-</td>
+				<td>-</td>
+				<td>-</td>
+				<td>-</td>
+					<?php
+				endif; //fin de num_rows>0
+				?>
+				<td>
+					<button class="btn btn-outline-primary btn-sm" title="Ver todos los adjuntos"><i class="bi bi-list"></i></button>
+				</td>
+				
 			</tr>
 			<?php
 			$i++; }

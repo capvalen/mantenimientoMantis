@@ -47,6 +47,9 @@ if( !isset($_COOKIE['ckPower']) ) {
 		<li class="nav-item" role="presentation" onclick="cambiarPlantilla('caja')">
 			<button class="nav-link" id="caja-tab" data-toggle="tab" data-target="#caja" type="button" role="tab" aria-controls="caja" aria-selected="false">Caja y Corona</button>
 		</li>
+		<li class="nav-item" role="presentation" onclick="cambiarPlantilla('documentos')">
+			<button class="nav-link" id="documentos-tab" data-toggle="tab" data-target="#documentos" type="button" role="tab" aria-controls="documentos" aria-selected="false">Documentos</button>
+		</li>
 	</ul>
 </section>
 
@@ -80,6 +83,13 @@ if( !isset($_COOKIE['ckPower']) ) {
 			</div>
 			<div class="resultado table-responsive">
 				<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> Cargando datos
+			</div>
+		</div>
+		<div class="tab-pane fade" id="documentos" role="tabpanel" aria-labelledby="caja-tab">
+			<div class="card my-3">
+				<div class="card-body">
+					<div class="resultado table-responsive"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -290,12 +300,23 @@ if( !isset($_COOKIE['ckPower']) ) {
 					})
 				});
 				break;
+			case 'documentos':
+				fetch('php/vencimientos/plantilla.php',{
+					method:'POST', body:datos
+				}).then(resp=>{
+					resp.text()
+					.then(data=>{ //console.log(data);
+						document.querySelector('#documentos .resultado').innerHTML=data;
+						contarCajas(tipo);
+					})
+				});
+				break;
 			default:
 				break;
 		}
 	}
 	function contarCajas( tipo ){
-		console.log('version, 1.03')
+		//console.log('version, 1.03')
 		const element = document.getElementById("divAlert");
 		if(element) element.remove()
 
