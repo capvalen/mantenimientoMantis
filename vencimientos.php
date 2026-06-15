@@ -12,9 +12,9 @@ if( !isset($_COOKIE['ckPower']) ) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Vencimientos - Transportes y Contratistas JKM SRL</title>
 	<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-	<link rel="stylesheet" href="css/bootstrap-select.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 </head>
 <body>
 
@@ -38,16 +38,16 @@ if( !isset($_COOKIE['ckPower']) ) {
 <section class="container-fluid">
 	<ul class="nav nav-tabs" id="myTab" role="tablist">
 		<li class="nav-item" role="presentation" onclick="cambiarPlantilla('soat')">
-			<button class="nav-link active" id="soat-tab" data-toggle="tab" data-target="#soat" type="button" role="tab" aria-controls="soat" aria-selected="true">SOAT</button>
+			<button class="nav-link active" id="soat-tab" data-bs-toggle="tab" data-bs-target="#soat" type="button" role="tab" aria-controls="soat" aria-selected="true">SOAT</button>
 		</li>
 		<li class="nav-item" role="presentation" onclick="cambiarPlantilla('aceite')">
-			<button class="nav-link" id="aceite-tab" data-toggle="tab" data-target="#aceite" type="button" role="tab" aria-controls="aceite" aria-selected="false">Aceite y Filtros</button>
+			<button class="nav-link" id="aceite-tab" data-bs-toggle="tab" data-bs-target="#aceite" type="button" role="tab" aria-controls="aceite" aria-selected="false">Aceite y Filtros</button>
 		</li>
 		<li class="nav-item" role="presentation" onclick="cambiarPlantilla('caja')">
-			<button class="nav-link" id="caja-tab" data-toggle="tab" data-target="#caja" type="button" role="tab" aria-controls="caja" aria-selected="false">Caja y Corona</button>
+			<button class="nav-link" id="caja-tab" data-bs-toggle="tab" data-bs-target="#caja" type="button" role="tab" aria-controls="caja" aria-selected="false">Caja y Corona</button>
 		</li>
 		<li class="nav-item" role="presentation" onclick="cambiarPlantilla('documentos')">
-			<button class="nav-link" id="documentos-tab" data-toggle="tab" data-target="#documentos" type="button" role="tab" aria-controls="documentos" aria-selected="false">Documentos</button>
+			<button class="nav-link" id="documentos-tab" data-bs-toggle="tab" data-bs-target="#documentos" type="button" role="tab" aria-controls="documentos" aria-selected="false">Documentos</button>
 		</li>
 	</ul>
 </section>
@@ -100,9 +100,7 @@ if( !isset($_COOKIE['ckPower']) ) {
     <div class="modal-content">
       <div class="modal-header border-0">
         <h5 class="modal-title" id="exampleModalLabel">Edición de la placa: <span id="fPlaca"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p>Puede editar los siguientes campos</p>
@@ -114,7 +112,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 				<input type="date" class="form-control" id="txtRCT">
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-primary" onclick="updateVencimiento()" data-dismiss="modal">Actualizar vencimientos</button>
+        <button type="button" class="btn btn-primary" onclick="updateVencimiento()" data-bs-dismiss="modal">Actualizar vencimientos</button>
       </div>
     </div>
   </div>
@@ -127,9 +125,7 @@ if( !isset($_COOKIE['ckPower']) ) {
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Insertar Mantenimiento</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
@@ -201,9 +197,7 @@ if( !isset($_COOKIE['ckPower']) ) {
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Insertar Actualización de Caja</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
@@ -248,10 +242,21 @@ if( !isset($_COOKIE['ckPower']) ) {
 
 	
 <?php include 'php/modal.php'; ?>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+if ($.fn && !$.fn.modal) {
+    $.fn.modal = function(action) {
+        return this.each(function() {
+            var instance = bootstrap.Modal.getOrCreateInstance(this);
+            if (action === 'show') instance.show();
+            else if (action === 'hide') instance.hide();
+        });
+    };
+}
+</script>
 <script src="js/moment.js"></script>
-<script src="js/bootstrap-select.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script>
 	var idPlaca=-1, queTipo='';
 	$(document).ready(function() {
@@ -634,7 +639,8 @@ txtObservacionCaja */
 
 </script>
 <style>
-.bootstrap-select .dropdown-toggle .filter-option{font-family:'Icofont', 'Segoe UI';}
+.bootstrap-select .dropdown-toggle .filter-option,
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner{font-family:inherit;}
 .bootstrap-select .dropdown-toggle .filter-option {
     border: 1px solid #c5c5c5;
     border-radius: .25rem;

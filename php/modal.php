@@ -10,7 +10,7 @@
       </div>
       <div class="modal-footer border-0">
 				<p class="text-danger d-none" id="pError3"></p>
-        <button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="bi bi-check"></i> Ok</button>
+        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"><i class="bi bi-check"></i> Ok</button>
       </div>
     </div>
   </div>
@@ -27,7 +27,7 @@
 				<h5 class="text-center text-muted" id="h5DetalleFaltan"></h5>
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-outline-success" data-dismiss="modal"><i class="bi bi-check"></i> Ok</button>
+        <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"><i class="bi bi-check"></i> Ok</button>
       </div>
     </div>
   </div>
@@ -37,9 +37,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"> Listado de personal</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<div class="table-responsive">
@@ -69,9 +67,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"><i class="icofont-plus-circle"></i> Agregar personal</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>Nick</p>
@@ -101,15 +97,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Borrar personal</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>¿Está seguro que desea borrar a: <strong id="strNombre"></strong>?</p>
       </div>
       <div class="modal-footer border-0">				
-        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
         <button type="button" class="btn btn-outline-danger" id="btnBorrarPersona"><i class="bi bi-eraser"></i> Borrar</button>
       </div>
     </div>
@@ -120,15 +114,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Borrar Registro</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>¿Está seguro que desea éste registro?</p>
       </div>
       <div class="modal-footer border-0">				
-        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
         <button type="button" class="btn btn-outline-danger" id="btnBorrarRegistro"><i class="bi bi-eraser"></i> Borrar</button>
       </div>
     </div>
@@ -139,15 +131,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Borrar Registro</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>¿Está seguro que desea ésta placa?</p>
       </div>
       <div class="modal-footer border-0">				
-        <button type="button" class="btn btn-outline-dark" data-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal" id="btnCancelarBorrar"><i class="bi bi-x"></i> Cancelar</button>
         <button type="button" class="btn btn-outline-danger" id="btnBorrarPlaca"><i class="bi bi-eraser"></i> Borrar</button>
       </div>
     </div>
@@ -160,9 +150,7 @@
     <div class="modal-content">
       <div class="modal-header border-0">
         <h5 class="modal-title" id="exampleModalLabel">Foto de la placa: <span id="fPlaca"></span></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p>Puede subir una nueva foto para la unidad</p>
@@ -172,7 +160,7 @@
 				</div>
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-primary" onclick="subirFotoPlaca()" data-dismiss="modal">Subir archivo</button>
+        <button type="button" class="btn btn-primary" onclick="subirFotoPlaca()" data-bs-dismiss="modal">Subir archivo</button>
       </div>
     </div>
   </div>
