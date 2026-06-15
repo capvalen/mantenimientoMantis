@@ -20,11 +20,11 @@ function reporteSoat($cadena){
 				<th>N°</th>
 				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
 				<th>Año Fab.</th>
-				<th>Fecha Vencimiento SOAT</th>
+				<th>SOAT</th>
 				<th>Alerta SOAT</th>
-				<th>Fecha Vencimiento R. Técnica</th>
+				<th>R. Técnica</th>
 				<th>Alerta R. Técnica</th>
-				<th>Fecha vencimiento Póliza RCT</th>
+				<th>Póliza RCT</th>
 				<th>Alerta Póliza RCT</th>
 				<th>@</th>
 		</thead>

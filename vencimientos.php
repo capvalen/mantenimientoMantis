@@ -11,11 +11,10 @@ if( !isset($_COOKIE['ckPower']) ) {
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Vencimientos - Transportes y Contratistas JKM SRL</title>
-	<link rel="shortcut icon" href="https://contratistasjkm.com/wp-content/uploads/2023/02/favic.png" type="image/x-icon">
+	<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="css/bootstrap-select.css">
-	<link rel="shortcut icon" href="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/favicon.png" />
 </head>
 <body>
 
@@ -321,6 +320,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 		if(element) element.remove()
 
 		placasAlertas = []
+		placasVencidas = []
 		const trs = document.querySelectorAll('#'+ tipo +' tr')
 		trs.forEach( fila =>{
 			/* if( placasAlertas.includes(fila.querySelector('.tdPlaca').dataset.value) ) {
@@ -330,10 +330,12 @@ if( !isset($_COOKIE['ckPower']) ) {
 			celdas.forEach( columna => {
 				if(columna.classList.contains('bg-warning'))
 					placasAlertas.push( fila.querySelector('.tdPlaca').dataset.value )
+				if(columna.classList.contains('bg-danger'))
+					placasVencidas.push( fila.querySelector('.tdPlaca').dataset.value )
 			})
 		})
 
-		console.info(placasAlertas)
+		//console.info(placasAlertas)
 
 		if(placasAlertas.length>0){
 			const alertDiv = document.createElement("div");
@@ -341,10 +343,22 @@ if( !isset($_COOKIE['ckPower']) ) {
       alertDiv.id = "divAlert";
       alertDiv.setAttribute("role", "alert");
       alertDiv.innerHTML = `			
-        <strong>¡Alerta!</strong> Existen placas (${placasAlertas.length}) por vencer son: ${placasAlertas.join(',')}` ;
+        <strong>¡Alerta!</strong> Existen placas (${placasAlertas.length}) por vencer: ${placasAlertas.join(',')}` ;
       const caja = document.getElementById(tipo);
       if (caja) {
         caja.insertBefore(alertDiv, caja.firstChild);
+      }    
+		}
+		if(placasVencidas.length>0){
+			const alertDivVencida = document.createElement("div");
+      alertDivVencida.className = "alert alert-danger alert-dismissible fade show mt-2";
+      alertDivVencida.id = "divAlert";
+      alertDivVencida.setAttribute("role", "alert");
+      alertDivVencida.innerHTML = `			
+        <strong>¡Alerta!</strong> Urgente placas (${placasVencidas.length}) vencidas: ${placasVencidas.join(',')}` ;
+      const cajaVencida = document.getElementById(tipo);
+      if (cajaVencida) {
+        cajaVencida.insertBefore(alertDivVencida, cajaVencida.firstChild);
       }    
 		}
 	}

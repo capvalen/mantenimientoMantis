@@ -11,11 +11,10 @@ if( !isset($_COOKIE['ckPower']) ) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Reportes - Transportes y Contratistas JKM SRL</title>
-	<link rel="shortcut icon" href="https://contratistasjkm.com/wp-content/uploads/2023/02/favic.png" type="image/x-icon">
+	<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="css/bootstrap-select.css">
-	<link rel="shortcut icon" href="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/favicon.png" />
 	
 </head>
 <body>
@@ -82,7 +81,21 @@ if( !isset($_COOKIE['ckPower']) ) {
 		</table>
 	</div>
 	<?php }else{ ?>
-	<p>Empieze seleccionando una placa en la esquina superior derecha. <i class="bi bi-arrow-up-right"></i></p>
+	<div class="d-none d-md-block">
+		<p>Empiece seleccionando una placa en la esquina superior derecha. <i class="bi bi-arrow-up-right"></i></p>
+	</div>
+	<div class="d-md-none">
+		<div class="row align-items-center">
+			<div class="col-12 col-sm-6">
+				<label class="mb-0"><i class="bi bi-funnel"></i> Seleccione una placa:</label>
+			</div>
+			<div class="col-12 col-sm-6 mt-2 mt-sm-0">
+				<select class="selectpicker w-100" data-width="100%" data-live-search="true" id="sltPlacas2" title="Filtro de placas">
+					<?php include 'php/optPlacas.php'; ?>
+				</select>
+			</div>
+		</div>
+	</div>
 	<?php } ?>
 </section>
 </div>
@@ -331,6 +344,12 @@ $('#sltPlacas').on('changed.bs.select', function (e, clickedIndex, isSelected, p
 		var placa=$(this).parent().parent().find('.selected a').text();
 		console.log( placa )
 		window.location.href = 'reporte.php?placa='+placa; //$('#sltPlacas').val()
+	}
+});
+$('#sltPlacas2').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if( $('#sltPlacas2').val()!=null ){	
+		var placa=$(this).parent().parent().find('.selected a').text();
+		window.location.href = 'reporte.php?placa='+placa;
 	}
 });
 <?php if( $_COOKIE['ckPower']==1){ ?>
