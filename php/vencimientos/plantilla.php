@@ -489,9 +489,10 @@ function reporteDocumentos($cadena, $esclavo){
 		FROM `placas` p where p.placActivo = 1
 		order by p.idPlaca asc;";
 	$resultado = $cadena->query($sql); $i=1;
+	$tiposDB = ['SOAT', 'Revisión', 'Póliza', 'Tarjeta'];
 	?>
 	<div class="table-responsive d-none d-md-block d-print-block">
-	<table class="table table-hover">
+	<table class="table table-hover table-bordered">
 		<thead class="text-center">
 				<th>N°</th>
 				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
@@ -499,7 +500,6 @@ function reporteDocumentos($cadena, $esclavo){
 				<th>Revisión técnica</th>
 				<th>Póliza</th>
 				<th>Tarjeta de propiedad</th>
-				<th>@</th>
 		</thead>
 		<tbody>
 			<?php
@@ -515,43 +515,39 @@ function reporteDocumentos($cadena, $esclavo){
 								a.*,
 								ROW_NUMBER() OVER (PARTITION BY tipo ORDER BY id DESC) AS row_num
 						FROM archivos a
-						WHERE idPlaca = {$row['idPlaca']}
+						WHERE idPlaca = {$row['idPlaca']} AND activo = 1
 				) AS RankedArchivos
 				WHERE row_num = 1
 				GROUP BY idPlaca;");
 
+				$rowArch = $archivos->fetch_assoc();
 			?>
 			<tr>
 				<td><?= $i;?></td>
 				<td class="tdPlaca" data-value="<?= $row['placSerie']?>"><?= $row['placSerie']?></td>
-				<?php
-				if($archivos->num_rows > 0):
-					while($rowArch = $archivos->fetch_assoc()){?>
-						<?php if($rowArch['SOAT']): ?>
-							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['SOAT'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>
-						<?php else: ?> <td>-</td> <?php endif; ?>
-						<?php if($rowArch['Revisión']): ?>
-							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['Revisión'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>
-						<?php else: ?> <td>-</td> <?php endif; ?>
-						<?php if($rowArch['Póliza']): ?>
-							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['Póliza'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>
-						<?php else: ?> <td>-</td> <?php endif; ?>
-						<?php if($rowArch['Tarjeta']): ?>
-							<td class="text-center"> <a class="btn btn-outline-secondary" href="archivos/<?= $rowArch['Tarjeta'] ?>" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a> </td>
-						<?php else: ?> <td>-</td> <?php endif; ?>
-					<?php } ?>
-					<?php
-				else: ?>
-				<td>-</td>
-				<td>-</td>
-				<td>-</td>
-				<td>-</td>
-					<?php
-				endif;
+				<?php foreach($tiposDB as $tipo):
+					$ruta = $rowArch ? $rowArch[$tipo] : null;
 				?>
-				<td>
-					<button class="btn btn-outline-primary btn-sm" title="Ver todos los adjuntos"><i class="bi bi-list"></i></button>
-				</td>
+					<td class="text-center td-documento">
+						<div class="d-flex gap-1 align-items-center justify-content-center td-documento-wrap">
+							<?php if($ruta): ?>
+							<a class="btn btn-sm btn-outline-secondary" href="archivos/<?= $ruta ?>" download title="Descargar">
+								<i class="bi bi-box-arrow-in-down"></i> Descargar
+							</a>
+							<?php if($_COOKIE['ckPower']==1): ?>
+							<button class="btn btn-sm btn-outline-danger btn-eliminar" onclick="eliminarDocumento(this, <?= $row['idPlaca'] ?>, '<?= $tipo ?>')" title="Eliminar archivo">
+								<i class="bi bi-x-lg"></i>
+							</button>
+							<?php endif; ?>
+							<?php endif; ?>
+							<?php if($_COOKIE['ckPower']==1): ?>
+							<button class="btn btn-sm btn-outline-primary btn-upload" onclick="subirDocumento(this, <?= $row['idPlaca'] ?>, '<?= $tipo ?>')" title="Subir archivo">
+								<i class="bi bi-upload"></i> Adjuntar
+							</button>
+							<?php endif; ?>
+						</div>
+					</td>
+				<?php endforeach; ?>
 			</tr>
 			<?php
 			$i++; }
@@ -562,6 +558,7 @@ function reporteDocumentos($cadena, $esclavo){
 	<div class="row d-md-none cards-container">
 		<?php
 		$resultado = $cadena->query($sql); $i=1;
+		$tiposLabel = ['SOAT'=>'SOAT', 'Revisión'=>'Revisión Técnica', 'Póliza'=>'Póliza', 'Tarjeta'=>'Tarjeta Propiedad'];
 		while($row = $resultado->fetch_assoc()){
 			$archivos = $esclavo->query("SELECT
 					idPlaca,
@@ -574,10 +571,12 @@ function reporteDocumentos($cadena, $esclavo){
 							a.*,
 							ROW_NUMBER() OVER (PARTITION BY tipo ORDER BY id DESC) AS row_num
 					FROM archivos a
-					WHERE idPlaca = {$row['idPlaca']}
+					WHERE idPlaca = {$row['idPlaca']} AND activo = 1
 			) AS RankedArchivos
 			WHERE row_num = 1
 			GROUP BY idPlaca;");
+
+			$rowArch = $archivos->fetch_assoc();
 		?>
 		<div class="col-12 col-sm-6 mb-3">
 			<div class="card tarjeta-venc h-100" data-placa="<?= $row['placSerie']?>">
@@ -586,25 +585,30 @@ function reporteDocumentos($cadena, $esclavo){
 					<hr class="my-2">
 					<div class="row g-1">
 						<?php
-						if($archivos->num_rows > 0){
-							while($rowArch = $archivos->fetch_assoc()){
-								$tipos = ['SOAT'=>'SOAT', 'Revisión'=>'Revisión Técnica', 'Póliza'=>'Póliza', 'Tarjeta'=>'Tarjeta Propiedad'];
-								$cols = ['SOAT'=>'col-6', 'Revisión'=>'col-6', 'Póliza'=>'col-6', 'Tarjeta'=>'col-6'];
-								foreach($tipos as $key=>$label){
-									echo '<div class="'.$cols[$key].' mt-1">';
-									echo '<small class="text-secondary">'.$label.':</small><br>';
-									if($rowArch[$key]){
-										echo '<a class="btn btn-outline-secondary btn-sm w-100" href="archivos/'.$rowArch[$key].'" download><i class="bi bi-box-arrow-in-down"></i> Descargar</a>';
-									}else{
-										echo '<span class="text-muted">-</span>';
-									}
-									echo '</div>';
-								}
-							}
-						}else{
-							echo '<div class="col-12 text-muted">Sin documentos registrados</div>';
-						}
+						foreach($tiposLabel as $key=>$label):
+							$ruta = $rowArch ? $rowArch[$key] : null;
 						?>
+							<div class="col-6 mt-1">
+								<small class="text-secondary"><?= $label ?>:</small><br>
+								<div class="d-flex gap-1">
+									<?php if($ruta): ?>
+									<a class="btn btn-outline-secondary btn-sm flex-grow-1" href="archivos/<?= $ruta ?>" download>
+										<i class="bi bi-box-arrow-in-down"></i> Descargar
+									</a>
+									<?php if($_COOKIE['ckPower']==1): ?>
+									<button class="btn btn-outline-danger btn-sm btn-eliminar" onclick="eliminarDocumento(this, <?= $row['idPlaca'] ?>, '<?= $key ?>')" title="Eliminar archivo">
+										<i class="bi bi-x-lg"></i>
+									</button>
+									<?php endif; ?>
+									<?php endif; ?>
+									<?php if($_COOKIE['ckPower']==1): ?>
+									<button class="btn btn-outline-primary btn-sm btn-upload" onclick="subirDocumento(this, <?= $row['idPlaca'] ?>, '<?= $key ?>')" title="Subir archivo">
+										<i class="bi bi-upload"></i> Adjuntar
+									</button>
+									<?php endif; ?>
+								</div>
+							</div>
+						<?php endforeach; ?>
 					</div>
 				</div>
 			</div>

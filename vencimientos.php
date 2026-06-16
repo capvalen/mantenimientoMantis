@@ -529,6 +529,62 @@ txtObservacionCaja */
 			})
 		}
 	}
+	function subirDocumento(btn, idPlaca, tipo) {
+		const input = document.createElement('input');
+		input.type = 'file';
+		input.accept = '.pdf,.jpg,.jpeg,.png,.doc,.docx';
+		input.onchange = function() {
+			const file = this.files[0];
+			if (!file) return;
+			const formData = new FormData();
+			formData.append('idPlaca', idPlaca);
+			formData.append('tipo', tipo);
+			formData.append('archivo', file);
+			btn.disabled = true;
+			btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+			fetch('php/vencimientos/subirDocumento.php', {
+				method: 'POST', body: formData
+			})
+			.then(res => res.text())
+			.then(respuesta => {
+				if (respuesta == 'ok') {
+					cambiarPlantilla('documentos');
+				} else {
+					alert('Error al subir el archivo');
+				}
+			})
+			.catch(() => alert('Error de conexión'))
+			.finally(() => {
+				btn.disabled = false;
+				btn.innerHTML = '<i class="bi bi-upload"></i>';
+			});
+		};
+		input.click();
+	}
+	function eliminarDocumento(btn, idPlaca, tipo) {
+		if(!confirm('¿Eliminar este archivo?')) return;
+		const formData = new FormData();
+		formData.append('idPlaca', idPlaca);
+		formData.append('tipo', tipo);
+		btn.disabled = true;
+		btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+		fetch('php/vencimientos/eliminarDocumento.php', {
+			method: 'POST', body: formData
+		})
+		.then(res => res.text())
+		.then(respuesta => {
+			if (respuesta == 'ok') {
+				cambiarPlantilla('documentos');
+			} else {
+				alert('Error al eliminar el archivo');
+			}
+		})
+		.catch(() => alert('Error de conexión'))
+		.finally(() => {
+			btn.disabled = false;
+			btn.innerHTML = '<i class="bi bi-x-lg"></i>';
+		});
+	}
 	function limpiarCamposInsert(){
 		$('#sltPlacaHoroEdit').val(-1).selectpicker('render')
 		$('#txtFechaHoroEdit').val('')
@@ -682,6 +738,11 @@ txtObservacionCaja */
 	border: transparent!important;	
 }
 .tarjeta-venc {border-radius:8px;border:1px solid #dee2e6;}
+.td-documento .btn-upload,
+.td-documento .btn-eliminar {opacity:0;transition:opacity .4s ease,transform .4s ease;transform:scale(.9);}
+.td-documento:hover .btn-upload,
+.td-documento:hover .btn-eliminar {opacity:1;transform:scale(1);}
+.btn-upload .spinner-border{width:1rem;height:1rem;}
 .tarjeta-venc .text-secondary {font-size:.8rem;}
 .tarjeta-venc .row > div {word-break:break-word;}
 .tarjeta-venc.border-danger {border-color:#dc3545!important;border-width:2px!important;}
