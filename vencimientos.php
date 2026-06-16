@@ -60,12 +60,12 @@ if( !isset($_COOKIE['ckPower']) ) {
 		<div class="tab-pane fade" id="aceite" role="tabpanel" aria-labelledby="aceite-tab">
 			<div class="card my-3">
 				<div class="card-body">
-					<label for="">Filtros</label>
-					<button class="btn btn-sm btn-outline-success btnFiltros" onclick="activarFiltro('operativo')">Operativo</button>
-					<button class="btn btn-sm btn-outline-warning btnFiltros" onclick="activarFiltro('programar')">Programar mantenimiento</button>
-					<button class="btn btn-sm btn-outline-danger btnFiltros" onclick="activarFiltro('mantenimiento')">Mantenimiento urgente</button>
-					<button class="btn btn-sm btn-outline-primary btnFiltros" onclick="activarFiltro('pendiente')">Pendiente Actualizar Km/Hora</button>
-					<button class="btn btn-sm btn-outline-secondary btnFiltros" onclick="activarFiltro('limpiar')">Limpiar filtro</button>
+					<label for=""><i class="bi bi-funnel"></i> Filtros</label>
+					<button class="btn btn-sm btn-outline-success btnFiltros my-1" onclick="activarFiltro('operativo')">Operativo</button>
+					<button class="btn btn-sm btn-outline-warning btnFiltros my-1" onclick="activarFiltro('programar')">Programar mantenimiento</button>
+					<button class="btn btn-sm btn-outline-danger btnFiltros my-1" onclick="activarFiltro('mantenimiento')">Mantenimiento urgente</button>
+					<button class="btn btn-sm btn-outline-primary btnFiltros my-1" onclick="activarFiltro('pendiente')">Pendiente Actualizar Km/Hora</button>
+					<button class="btn btn-sm btn-outline-secondary btnFiltros my-1" onclick="activarFiltro('limpiar')" title="Limpiar filtro"><i class="bi bi-eraser"></i></button>
 				</div>
 			</div>
 			<div class="resultado table-responsive"></div>
@@ -73,11 +73,11 @@ if( !isset($_COOKIE['ckPower']) ) {
 		<div class="tab-pane fade" id="caja" role="tabpanel" aria-labelledby="caja-tab">
 		<div class="card my-3">
 				<div class="card-body">
-					<label for="">Filtros</label>
+					<label for=""><i class="bi bi-funnel"></i> Filtros</label>
 					<button class="btn btn-sm btn-outline-success btnFiltros" onclick="activarFiltroFiltro('operativo')">Operativo</button>
 					<button class="btn btn-sm btn-outline-warning btnFiltros" onclick="activarFiltroFiltro('programar')">Programar mantenimiento</button>
 					<button class="btn btn-sm btn-outline-danger btnFiltros" onclick="activarFiltroFiltro('mantenimiento')">Mantenimiento urgente</button>
-					<button class="btn btn-sm btn-outline-secondary btnFiltros" onclick="activarFiltroFiltro('limpiar')">Limpiar filtro</button>
+					<button class="btn btn-sm btn-outline-secondary btnFiltros" onclick="activarFiltroFiltro('limpiar')" title="Limpiar filtro"><i class="bi bi-eraser"></i></button>
 				</div>
 			</div>
 			<div class="resultado table-responsive">
@@ -106,9 +106,9 @@ if( !isset($_COOKIE['ckPower']) ) {
         <p>Puede editar los siguientes campos</p>
 				<label for="">Fecha de vencimiento de Soat:</label>
 				<input type="date" class="form-control" id="txtSoat">
-				<label for="">Fecha de vencimiento de RT:</label>
+				<label for="" class="mt-2">Fecha de vencimiento de RT:</label>
 				<input type="date" class="form-control" id="txtRT">
-				<label for="">Fecha de vencimiento de RCT:</label>
+				<label for="" class="mt-2">Fecha de vencimiento de RCT:</label>
 				<input type="date" class="form-control" id="txtRCT">
       </div>
       <div class="modal-footer border-0">
@@ -123,54 +123,54 @@ if( !isset($_COOKIE['ckPower']) ) {
 <div class="modal fade" id="modalInsertarHodometro" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-0">
         <h5 class="modal-title">Insertar Mantenimiento</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
-				<div class="form-group row ">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Placa:</label>
 					<div class="col-sm-8">
-					<select class="selectpicker" data-live-search="true" id="sltPlacaHoroEdit" title="&#xed11; Placas disponibles" >
+					<select class="selectpicker" data-live-search="true" id="sltPlacaHoroEdit" title="Placas disponibles" >
 						<?php include 'php/optPlacas.php'; ?>
 					</select>
 					</div>
 				</div>
-				<div class="form-group row grupoHoro">
+				<div class="form-group row mb-3 grupoHoro">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
 					<div class="col-sm-8">
 						<input type="date" class="form-control" id="txtFechaHoroEdit">
 					</div>
 				</div>
-				<div class="form-group row grupoHoro">
+				<div class="form-group row mb-3 grupoHoro">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Horómetro / Odómetro actual:</label>
 					<div class="col-sm-8">
 						<input type="number" class="form-control" id="txtHoroEdit">
 					</div>
 				</div>
-				<div class="form-group row grupoActual">
+				<div class="form-group row mb-3 grupoActual">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
 					<div class="col-sm-8">
 						<input type="date" class="form-control" id="txtFechaActualEdit">
 					</div>
 				</div>
-				<div class="form-group row grupoActual">
+				<div class="form-group row mb-3 grupoActual">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Odómetro actual:</label>
 					<div class="col-sm-8">
 						<input type="number" class="form-control" id="txtOdoAntEdit">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Tipo:</label>
 					<div class="col-sm-8">
-					<select class="selectpicker" data-live-search="true" id="sltTipo1" title="&#xed11; Tipo" >
-						<option value="1">K.m.</option>
+					<select class="selectpicker" data-live-search="true" id="sltTipo1" title="Tipo" >
+						<option value="1" selected>K.m.</option>
 						<option value="2">Horas</option>
 					</select>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Observaciones:</label>
 					<div class="col-sm-8">
 						<input type="text" class="form-control" id="txtObservacionEdit">
@@ -179,7 +179,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 				
 				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-0">
 				<div class="grupoHoro">
 					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar actualización</button>
 				</div>
@@ -195,33 +195,33 @@ if( !isset($_COOKIE['ckPower']) ) {
 <div class="modal fade" id="modalInsertarCaja" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header border-0">
         <h5 class="modal-title">Insertar Actualización de Caja</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
-				<div class="form-group row ">
+				<div class="form-group row my-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Placa:</label>
 					<div class="col-sm-8">
-					<select class="selectpicker" data-live-search="true" id="sltPlacCaja" title="&#xed11; Placas disponibles" >
+					<select class="selectpicker" data-live-search="true" id="sltPlacCaja" title="Placas disponibles" >
 						<?php include 'php/optPlacas.php'; ?>
 					</select>
 					</div>
 				</div>
-				<div class="form-group row ">
+				<div class="form-group row my-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
 					<div class="col-sm-8">
 						<input type="date" class="form-control" id="txtFechaCaja">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row my-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Horómetro / Odómetro actual:</label>
 					<div class="col-sm-8">
 						<input type="number" class="form-control" id="txtHoroCaja">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row my-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Observaciones:</label>
 					<div class="col-sm-8">
 						<input type="text" class="form-control" id="txtObservacionCaja">
@@ -230,7 +230,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 				
 				<p class="pError text-danger d-none"><i class="bi bi-exclamation-circle"></i> <span id="errorMensaje"></span></p>
       </div>
-      <div class="modal-footer">
+      <div class="modal-footer border-0">
 				<div class="">
 					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoCaja()"><i class="bi bi-save"></i> Insertar actualización</button>
 				</div>
@@ -261,8 +261,7 @@ if ($.fn && !$.fn.modal) {
 	var idPlaca=-1, queTipo='';
 	$(document).ready(function() {
 		$('.selectpicker').selectpicker('render');
-		$('.selectpicker').selectpicker('val', -1);
-		$('#sltTipo1').selectpicker('val', 1);
+		
 		$('#txtFechaHoroEdit').val( moment().format('YYYY-MM-DD') );
 		cambiarPlantilla('soat');
 	})
@@ -321,8 +320,7 @@ if ($.fn && !$.fn.modal) {
 	}
 	function contarCajas( tipo ){
 		//console.log('version, 1.03')
-		const element = document.getElementById("divAlert");
-		if(element) element.remove()
+		document.querySelectorAll('#' + tipo + ' .alert').forEach(el => el.remove())
 
 		placasAlertas = []
 		placasVencidas = []
@@ -344,11 +342,14 @@ if ($.fn && !$.fn.modal) {
 
 		if(placasAlertas.length>0){
 			const alertDiv = document.createElement("div");
-      alertDiv.className = "alert alert-warning alert-dismissible fade show mt-2";
+      alertDiv.className = "alert alert-dismissible fade show mt-2";
       alertDiv.id = "divAlert";
       alertDiv.setAttribute("role", "alert");
+      alertDiv.style.backgroundColor = "rgb(255,193,7)";
+      alertDiv.style.color = "#fff";
+      alertDiv.style.border = "none";
       alertDiv.innerHTML = `			
-        <strong>¡Alerta!</strong> Existen placas (${placasAlertas.length}) por vencer: ${placasAlertas.join(',')}` ;
+        <i class="bi bi-exclamation-triangle-fill"></i> <strong>¡Alerta!</strong> Existen placas (${placasAlertas.length}) por vencer: ${placasAlertas.join(',')}` ;
       const caja = document.getElementById(tipo);
       if (caja) {
         caja.insertBefore(alertDiv, caja.firstChild);
@@ -356,11 +357,14 @@ if ($.fn && !$.fn.modal) {
 		}
 		if(placasVencidas.length>0){
 			const alertDivVencida = document.createElement("div");
-      alertDivVencida.className = "alert alert-danger alert-dismissible fade show mt-2";
-      alertDivVencida.id = "divAlert";
+      alertDivVencida.className = "alert alert-dismissible fade show mt-2";
+      alertDivVencida.id = "divAlertVencida";
       alertDivVencida.setAttribute("role", "alert");
+      alertDivVencida.style.backgroundColor = "rgb(246,15,15)";
+      alertDivVencida.style.color = "#fff";
+      alertDivVencida.style.border = "none";
       alertDivVencida.innerHTML = `			
-        <strong>¡Alerta!</strong> Urgente placas (${placasVencidas.length}) vencidas: ${placasVencidas.join(',')}` ;
+        <i class="bi bi-x-octagon-fill"></i> <strong>¡Alerta!</strong> Urgente placas (${placasVencidas.length}) vencidas: ${placasVencidas.join(',')}` ;
       const cajaVencida = document.getElementById(tipo);
       if (cajaVencida) {
         cajaVencida.insertBefore(alertDivVencida, cajaVencida.firstChild);
@@ -406,7 +410,8 @@ if ($.fn && !$.fn.modal) {
 			$('.grupoHoro').addClass('d-none')
 			$('.grupoActual').removeClass('d-none')
 		}
-		$('#sltPlacaHoroEdit').selectpicker('val', idPlaca)
+$('#sltPlacaHoroEdit').val(idPlaca).selectpicker('refresh')
+		$('#sltTipo1').val(1).selectpicker('refresh')
 		cambiarValores()
 		$('#modalInsertarHodometro').modal('show')
 	}
@@ -416,19 +421,22 @@ if ($.fn && !$.fn.modal) {
 		}
 	});
 	function abrirModalInsertarCaja(idPlaca){
-		$('#sltPlacCaja').selectpicker('val', idPlaca)
+		$('#sltPlacCaja').val(idPlaca).selectpicker('refresh')
 		$('#txtFechaCaja').val(moment().format("YYYY-MM-DD"))
 		$('#modalInsertarCaja').modal('show')
 	}
 	function cambiarValores(){
 		let idNuevo = $('#sltPlacaHoroEdit').selectpicker('val');
-		//console.log('id', idNuevo);
-		$('#txtHoroEdit').val($('#'+idNuevo+' .tdHorometro').data('value'))
-		$('#txtOdoAntEdit').val($('#'+idNuevo+' .tdActual').data('value'))
+		if(!idNuevo) return;
+		var fila = $('#aceite table tbody tr').filter(function(){return this.id==idNuevo;});
+		if(!fila.length) fila = $('#caja table tbody tr').filter(function(){return this.id==idNuevo;});
+		if(!fila.length) return;
+		$('#txtHoroEdit').val(fila.find('.tdHorometro').data('value'))
+		$('#txtOdoAntEdit').val(fila.find('.tdActual').data('value'))
 		if(queTipo == 'actualizacion'){
-			$('#txtFechaActualEdit').val($('#'+idNuevo+' .tdFecha2').data('value'))
+			$('#txtFechaActualEdit').val(fila.find('.tdFecha2').data('value'))
 		}else{
-			$('#txtFechaHoroEdit').val($('#'+idNuevo+' .tdFecha1').data('value'))
+			$('#txtFechaHoroEdit').val(fila.find('.tdFecha1').data('value'))
 		}
 	}
 	function insertarMantenimientoHoro(){
@@ -522,7 +530,7 @@ txtObservacionCaja */
 		}
 	}
 	function limpiarCamposInsert(){
-		$('#sltPlacaHoroEdit').selectpicker('val', -1)
+		$('#sltPlacaHoroEdit').val(-1).selectpicker('render')
 		$('#txtFechaHoroEdit').val('')
 		$('#fechaActual').val('')
 		$('#txtHoroEdit').val('')
@@ -536,33 +544,34 @@ txtObservacionCaja */
     }
 	});
 	function buscarPlaca(){
-		
 		let texto = txtBuscarPlaca.value;
-		let todo = document.querySelectorAll('.resultado tbody tr');
-		let filtro = ''
 		let arreglo = texto.toLowerCase().replace(' ','').split(',');
+		let tablas = document.querySelectorAll('.resultado tbody tr');
+		let cards = document.querySelectorAll('.resultado .tarjeta-venc');
 
-		todo.forEach( campo=>{
-			
+		if(texto ==''){
+			tablas.forEach(function(r){r.classList.remove('d-none')});
+			cards.forEach(function(c){c.classList.remove('d-none')});
+			return;
+		}
 
-			if(texto ==''){
-				campo.classList.remove('d-none')
-			}
-			filtro = campo.querySelectorAll('td')[1].innerText
-						
+		tablas.forEach(function(campo){
+			var filtro = campo.querySelectorAll('td')[1]?.innerText || '';
 			if(contains(filtro.toLowerCase(), arreglo)){
-				campo.classList.remove('d-none')
+				campo.classList.remove('d-none');
 			}else{
-				campo.classList.add('d-none')
+				campo.classList.add('d-none');
 			}
+		});
 
-
-			/* if(filtro.toLowerCase().includes(texto.toLowerCase())){
-				campo.classList.remove('d-none')
+		cards.forEach(function(card){
+			var placa = (card.dataset.placa || '').toLowerCase();
+			if(contains(placa, arreglo)){
+				card.classList.remove('d-none');
 			}else{
-				campo.classList.add('d-none')
-			} */
-		})
+				card.classList.add('d-none');
+			}
+		});
 	}
 	function limbiarBusqueda(){
 		txtBuscarPlaca.value='';
@@ -578,7 +587,8 @@ txtObservacionCaja */
 	function activarFiltro(tipo){
 		$('.btnFiltros').removeClass('active')
 		$(event.target).addClass('active')
-		let todo = document.querySelectorAll('#aceite .resultado tbody tr');
+		let filas = document.querySelectorAll('#aceite .resultado tbody tr');
+		let cards = document.querySelectorAll('#aceite .resultado .tarjeta-venc');
 		let fecha = null;
 		let hoy = moment();
 		switch (tipo) {
@@ -590,31 +600,41 @@ txtObservacionCaja */
 			default:
 				break;
 		}
-		if(tipo!='limpiar' && tipo!='pendiente')
-			todo.forEach(campo =>{
-				if( campo.querySelectorAll('td')[2].innerText == $filtro ){
-					campo.classList.remove('d-none')
+		if(tipo!='limpiar' && tipo!='pendiente'){
+			filas.forEach(function(campo){
+				if(campo.querySelectorAll('td')[2].innerText == $filtro){
+					campo.classList.remove('d-none');
 				}else{
-					campo.classList.add('d-none')
+					campo.classList.add('d-none');
 				}
-			})
-		else if( tipo=='pendiente')
-			todo.forEach(campo =>{
+			});
+			cards.forEach(function(card){
+				if(card.dataset.estado == $filtro){
+					card.classList.remove('d-none');
+				}else{
+					card.classList.add('d-none');
+				}
+			});
+		}else if( tipo=='pendiente'){
+			filas.forEach(function(campo){
 				fecha = moment(campo.querySelectorAll('td')[3].dataset.value)
 				diferencia = hoy.diff(fecha, 'days');
-				//console.log(fecha.format('YYYY-MM-DD'), diferencia, campo.querySelectorAll('td')[3].dataset.value);
-				if( diferencia >= 7 ){
+				if(diferencia >= 7){
 					campo.classList.remove('d-none')
 				}else{
 					campo.classList.add('d-none')
 				}
-			})
-		else $('.resultado tbody tr').removeClass('d-none')
+			});
+		}else{
+			filas.forEach(function(r){r.classList.remove('d-none')});
+			cards.forEach(function(c){c.classList.remove('d-none')});
+		}
 	}
 	function activarFiltroFiltro(tipo){
 		$('.btnFiltros').removeClass('active')
 		$(event.target).addClass('active')
-		let todo = document.querySelectorAll('#caja .resultado tbody tr');
+		let filas = document.querySelectorAll('#caja .resultado tbody tr');
+		let cards = document.querySelectorAll('#caja .resultado .tarjeta-venc');
 		let fecha = null;
 		let hoy = moment();
 		switch (tipo) {
@@ -626,15 +646,25 @@ txtObservacionCaja */
 			default:
 				break;
 		}
-		if(tipo!='limpiar' && tipo!='pendiente')
-			todo.forEach(campo =>{
-				if( campo.querySelectorAll('td')[2].innerText == $filtro ){
-					campo.classList.remove('d-none')
+		if(tipo!='limpiar' && tipo!='pendiente'){
+			filas.forEach(function(campo){
+				if(campo.querySelectorAll('td')[2].innerText == $filtro){
+					campo.classList.remove('d-none');
 				}else{
-					campo.classList.add('d-none')
+					campo.classList.add('d-none');
 				}
-			})
-		else $('.resultado tbody tr').removeClass('d-none')
+			});
+			cards.forEach(function(card){
+				if(card.dataset.estado == $filtro){
+					card.classList.remove('d-none');
+				}else{
+					card.classList.add('d-none');
+				}
+			});
+		}else{
+			filas.forEach(function(r){r.classList.remove('d-none')});
+			cards.forEach(function(c){c.classList.remove('d-none')});
+		}
 	}
 
 </script>
@@ -646,9 +676,18 @@ txtObservacionCaja */
     border-radius: .25rem;
 }
 .bg-dark{background-color:#0e0e0e!important}
+.bg-success{background-color:rgb(16,199,114)!important;color:#132900!important}
+.bg-danger{background-color:rgb(246,15,15)!important;color:#fff!important}
 .bootstrap-select .dropdown-toggle .filter-option{
 	border: transparent!important;	
 }
+.tarjeta-venc {border-radius:8px;border:1px solid #dee2e6;}
+.tarjeta-venc .text-secondary {font-size:.8rem;}
+.tarjeta-venc .row > div {word-break:break-word;}
+.tarjeta-venc.border-danger {border-color:#dc3545!important;border-width:2px!important;}
+.tarjeta-venc.border-warning {border-color:#ffc107!important;border-width:2px!important;}
+.card-body .badge {font-size:.75rem;}
+.gap-2 {gap:.5rem!important;}
 .lds-ellipsis {
   display: inline-block;
   position: relative;

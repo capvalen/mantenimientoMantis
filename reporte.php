@@ -29,6 +29,9 @@ if( !isset($_COOKIE['ckPower']) ) {
 .bootstrap-select .dropdown-toggle .filter-option{
 	border: transparent!important;	
 }
+.tarjeta-mant {border-radius:8px;border:1px solid #dee2e6;}
+.tarjeta-mant .text-secondary {font-size:.8rem;}
+.tarjeta-mant .row > div {word-break:break-word;}
 </style>
 <?php include 'menu.php';?>
 <div class="container-fluid">
@@ -60,7 +63,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 		</div>
 		
 
-	<div class="table-responsive">
+	<div class="table-responsive d-none d-md-block d-print-block">
 		<table class="table table-hover table-striped">
 			<thead>
 				<tr class="text-center">
@@ -76,11 +79,14 @@ if( !isset($_COOKIE['ckPower']) ) {
 					<th class="d-print-none">Factura</th>
 				</tr>
 			</thead>
-			<tbody>
-				<?php include "php/listarReportePlacas.php";?>
-			</tbody>
+			<tbody id="tablaBody"></tbody>
 		</table>
 	</div>
+	<div id="cardsWrapper" class="d-md-none d-print-none"></div>
+	<div id="loadMoreWrapper" class="text-center my-3">
+		<button id="btnCargarMas" class="btn btn-outline-primary d-none"><i class="bi bi-plus-circle"></i> Cargar más</button>
+	</div>
+	<div id="sinResultados" class="alert alert-info d-none">No se encontraron resultados</div>
 	<?php }else{ ?>
 	<div class="d-none d-md-block">
 		<p>Empiece seleccionando una placa en la esquina superior derecha. <i class="bi bi-arrow-up-right"></i></p>
@@ -154,66 +160,66 @@ if( !isset($_COOKIE['ckPower']) ) {
       </div>
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Placa:</label>
 					<div class="col-sm-8">
-					<select class="selectpicker" data-live-search="true" id="sltPlacasMant" title="&#xed11; Placas disponibles">
+					<select class="selectpicker" data-live-search="true" id="sltPlacasMant" title="Placas disponibles">
 						<?php include 'php/optPlacas.php'; ?>
 					</select>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Fecha:</label>
 					<div class="col-sm-8">
 					<input type="date" class="form-control" id="txtFechaMant">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Tipo mantenimiento:</label>
 					<div class="col-sm-8">
-					<select class="selectpicker" data-live-search="true" id="sltTipoMant" title="&#xed11; Tipo de mantenimiento">
+					<select class="selectpicker" data-live-search="true" id="sltTipoMant" title="Tipo de mantenimiento">
 						<option value="1">Preventivo</option>
 						<option value="2">Correctivo</option>
 					</select>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Descripción:</label>
 					<div class="col-sm-8">
 					<textarea class="form-control" id="txtDescipcionMant"  rows="3"></textarea>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Kilometraje:</label>
 					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtKilometrajeMant" value="0" min="0">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Lugar:</label>
 					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtLugarMant">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Responsable:</label>
 					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtResponsableMant">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-4 col-form-label">Monto:</label>
 					<div class="col-sm-8">
 					<input type="text" class="form-control" id="txtMontoMant" value="0">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="txtAdjuntoMant" class="col-sm-4 col-form-label">Informe:</label>
 					<div class="col-sm-8">
 					<input type="file" class="form-control" id="txtAdjuntoMant" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="txtAdjuntoFactura" class="col-sm-4 col-form-label">Factura:</label>
 					<div class="col-sm-8">
 					<input type="file" class="form-control" id="txtAdjuntoFactura" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
@@ -238,60 +244,60 @@ if( !isset($_COOKIE['ckPower']) ) {
       </div>
       <div class="modal-body">
 				<p>Rellene los campos básicos:</p>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Placa:</label>
 					<div class="col-sm-9">
-					<select class="selectpicker" data-live-search="true" id="sltPlacasMantEdit" title="&#xed11; Placas disponibles" disabled>
+					<select class="selectpicker" data-live-search="true" id="sltPlacasMantEdit" title="Placas disponibles" disabled>
 						<?php include 'php/optPlacas.php'; ?>
 					</select>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Fecha:</label>
 					<div class="col-sm-9">
 					<input type="date" class="form-control" id="txtFechaMantEdit">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Tipo mantenimiento:</label>
 					<div class="col-sm-9">
-					<select class="selectpicker" data-live-search="true" id="sltTipoMantEdit" title="&#xed11; Tipo de mantenimiento">
+					<select class="selectpicker" data-live-search="true" id="sltTipoMantEdit" title="Tipo de mantenimiento">
 						<option value="1">Preventivo</option>
 						<option value="2">Correctivo</option>
 					</select>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Descripción:</label>
 					<div class="col-sm-9">
 					<textarea class="form-control" id="txtDescipcionMantEdit"  rows="3"></textarea>
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Kilometraje:</label>
 					<div class="col-sm-9">
 					<input type="text" class="form-control" id="txtKilometrajeMantEdit" value="0" min="0">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Lugar:</label>
 					<div class="col-sm-9">
 					<input type="text" class="form-control" id="txtLugarMantEdit">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Responsable:</label>
 					<div class="col-sm-9">
 					<input type="text" class="form-control" id="txtResponsableMantEdit">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="staticEmail" class="col-sm-3 col-form-label">Monto:</label>
 					<div class="col-sm-9">
 					<input type="text" class="form-control" id="txtMontoMantEdit" value="0">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="txtAdjuntoMantEdit" class="col-sm-3 col-form-label">Informe:</label>
 					<div class="col-sm-9">
 					<div  class="hidden">
@@ -300,7 +306,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 					<input type="file" class="form-control" id="txtAdjuntoMantEdit" accept=".png, .jpg, .jpeg, .doc,.docx, .pdf, .xls, xlsx">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row mb-3">
 					<label for="txtFacturaEdit" class="col-sm-3 col-form-label">Factura:</label>
 					<div class="col-sm-9">
 					<div  class="hidden">
@@ -321,6 +327,9 @@ if( !isset($_COOKIE['ckPower']) ) {
 
 <?php } ?>
 
+<button id="btnScrollTop" class="btn btn-primary position-fixed d-none" style="bottom:20px;right:20px;z-index:999;width:44px;height:44px;border-radius:8px;" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+	<i class="bi bi-arrow-up"></i>
+</button>
 <?php include 'php/modal.php'; ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -339,12 +348,22 @@ if ($.fn && !$.fn.modal) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script>
 var idGlobal='';
+var bloqueOffset = 0;
+var bloqueLimit = 50;
+var tieneMas = false;
+var cargandoBloque = false;
 $(document).ready(function() {
 	$('.selectpicker').selectpicker('render');
-	$('.selectpicker').selectpicker('val', -1);
+	//$('.selectpicker').val(-1).selectpicker('refresh');
 	$('#txtFechaMant').val( moment().format('YYYY-MM-DD') );
 	datosIniciales();
 })
+$(window).on('scroll', function() {
+	$('#btnScrollTop').toggleClass('d-none', $(this).scrollTop() < 300);
+});
+$('#btnCargarMas').click(function() {
+	cargarBloque();
+});
 $('#sltPlacas').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if(clickedIndex !== undefined && isSelected){
 		var placa=$(this).parent().parent().find('.selected a').text();
@@ -730,11 +749,12 @@ function pantallaOver(tipo) {
 
 function datosIniciales(){
 	<?php if( isset($_GET['placa']) ):?>
-		document.getElementById('fPlaca').innerText = "<?= $_GET['placa']; ?>";
-		let datos = new FormData();
-		datos.append('placa', "<?= $_GET['placa']; ?>");
+		var placa = "<?= htmlspecialchars($_GET['placa'], ENT_QUOTES) ?>";
+		document.getElementById('fPlaca').innerText = placa;
+		let datosPlaca = new FormData();
+		datosPlaca.append('placa', placa);
 		fetch('php/pedirDatosPorPlaca.php',{
-			method:'POST', body:datos
+			method:'POST', body:datosPlaca
 		}).then(promesa=>{
 			promesa.json()
 			.then(resp=>{
@@ -748,7 +768,73 @@ function datosIniciales(){
 			})
 		
 		})
+		cargarBloque();
 	<?php endif;?>
+}
+function renderFila(row, idx){
+	var admin = <?= $_COOKIE['ckPower']==1 ? 'true' : 'false'?>;
+	var h = '<tr>';
+	h += '<td style="white-space:nowrap">';
+	if(admin) h += '<span class="d-print-none"><button class="btn btn-outline-danger btn-sm border-0" onclick="borrarDescipcion('+row.idMantenimiento+')"><i class="bi bi-x"></i></button> <button class="btn btn-outline-primary btn-sm border-0" onclick="updateDescipcion('+row.idMantenimiento+','+row.idPlaca+','+idx+')"><i class="bi bi-pencil-square"></i></button></span> ';
+	h += (idx+1)+'</td>';
+	h += '<td class="tdFecha"><span>'+row.manFecha+'</span><span class="d-print-flex d-none">'+row.mantDescipcion+'</span></td>';
+	h += '<td class="tdTipoMant d-print-none" data-id="'+row.idTipoMantenimiento+'">'+row.tipmDescripcion+'</td>';
+	h += '<td class="tdDescipcion">'+row.mantDescipcion+'</td>';
+	h += '<td class="tdKilo">'+row.mantKilometraje+'</td>';
+	h += '<td class="text-capitalize"><span class="tdLugar">'+row.mantLugar+'</span><span class="d-print-flex d-none">'+row.mantResponsable+'</span></td>';
+	h += '<td class="text-capitalize d-print-none tdResponsable">'+row.mantResponsable+'</td>';
+	h += '<td class="d-print-none tdMonto">'+row.mantMonto+'</td>';
+	h += '<td class="d-print-none tdArchivo" title="Descargar archivo">'+(row.mantAdjunto?'<a href="./files/'+row.mantAdjunto+'" download><i class="bi bi-file-arrow-down"></i></a>':'')+'</td>';
+	h += '<td class="d-print-none tdFactura" title="Descargar factura">'+(row.mantFactura?'<a href="./facturas/'+row.mantFactura+'" download><i class="bi bi-file-arrow-down"></i></a>':'')+'</td>';
+	h += '</tr>';
+	document.getElementById('tablaBody').insertAdjacentHTML('beforeend', h);
+}
+function renderTarjeta(row, idx){
+	var admin = <?= $_COOKIE['ckPower']==1 ? 'true' : 'false'?>;
+	var h = '<div class="card mb-2 tarjeta-mant">';
+	h += '<div class="card-body p-3">';
+	h += '<div class="d-flex justify-content-between align-items-start">';
+	h += '<strong>#'+(idx+1)+'</strong>';
+	if(admin) h += '<div><button class="btn btn-outline-danger btn-sm border-0" onclick="borrarDescipcion('+row.idMantenimiento+')"><i class="bi bi-x"></i></button> <button class="btn btn-outline-primary btn-sm border-0" onclick="updateDescipcion('+row.idMantenimiento+','+row.idPlaca+','+idx+')"><i class="bi bi-pencil-square"></i></button></div>';
+	h += '</div>';
+	h += '<div class="row g-1 mt-2">';
+	h += '<div class="col-6"><small class="text-secondary">Fecha:</small><br>'+row.manFecha+'</div>';
+	h += '<div class="col-6"><small class="text-secondary">Tipo:</small><br>'+row.tipmDescripcion+'</div>';
+	h += '<div class="col-12 mt-1"><small class="text-secondary">Descripcion:</small><br>'+row.mantDescipcion+'</div>';
+	h += '<div class="col-6 mt-1"><small class="text-secondary">Kilometraje:</small><br>'+row.mantKilometraje+'</div>';
+	h += '<div class="col-6 mt-1"><small class="text-secondary">Lugar:</small><br>'+row.mantLugar+'</div>';
+	h += '<div class="col-6 mt-1"><small class="text-secondary">Responsable:</small><br>'+row.mantResponsable+'</div>';
+	h += '<div class="col-6 mt-1"><small class="text-secondary">Monto:</small><br>'+row.mantMonto+'</div>';
+	h += '<div class="col-12 mt-1"><small class="text-secondary">Archivos:</small><br>';
+	if(row.mantAdjunto) h += '<a href="./files/'+row.mantAdjunto+'" download class="me-2"><i class="bi bi-file-arrow-down"></i> Informe</a> ';
+	if(row.mantFactura) h += '<a href="./facturas/'+row.mantFactura+'" download><i class="bi bi-file-arrow-down"></i> Factura</a> ';
+	if(!row.mantAdjunto && !row.mantFactura) h += '-';
+	h += '</div></div></div></div>';
+	document.getElementById('cardsWrapper').insertAdjacentHTML('beforeend', h);
+}
+function cargarBloque(){
+	if(cargandoBloque) return;
+	cargandoBloque = true;
+	var placa = "<?= isset($_GET['placa']) ? htmlspecialchars($_GET['placa'], ENT_QUOTES) : '' ?>";
+	if(!placa) return;
+	var datos = new FormData();
+	datos.append('placa', placa);
+	datos.append('offset', bloqueOffset);
+	datos.append('limit', bloqueLimit);
+	fetch('php/listarReportePlacas_json.php', {method:'POST', body:datos})
+	.then(r=>r.json())
+	.then(resp=>{
+		resp.rows.forEach(function(row, i){
+			var idx = bloqueOffset + i;
+			renderFila(row, idx);
+			renderTarjeta(row, idx);
+		});
+		bloqueOffset += resp.rows.length;
+		tieneMas = resp.hasMore;
+		document.getElementById('btnCargarMas').classList.toggle('d-none', !tieneMas);
+		document.getElementById('sinResultados').classList.toggle('d-none', bloqueOffset>0 || resp.total==0);
+		cargandoBloque = false;
+	});
 }
 function previsualizarFoto(){
 	const input = document.getElementById('plaFoto');
@@ -814,33 +900,34 @@ document.querySelector('#txtBuscarPlaca').addEventListener('keypress', function 
 	}
 });
 function buscarPlaca(){
-	
 	let texto = txtBuscarPlaca.value;
-	let todo = document.querySelectorAll('table tbody tr');
-	let filtro = ''
 	let arreglo = texto.toLowerCase().replace(' ','').split(',');
+	let tablaRows = document.querySelectorAll('#tablaBody tr');
+	let cards = document.querySelectorAll('#cardsWrapper .tarjeta-mant');
 
-	todo.forEach( campo=>{
-		
+	if(texto ==''){
+		tablaRows.forEach(function(r){r.classList.remove('d-none')});
+		cards.forEach(function(c){c.classList.remove('d-none')});
+		return;
+	}
 
-		if(texto ==''){
-			campo.classList.remove('d-none')
-		}
-		filtro = campo.querySelectorAll('td')[3].innerText
-					
+	tablaRows.forEach(function(campo){
+		var filtro = campo.querySelectorAll('td')[3]?.innerText || '';
 		if(contains(filtro.toLowerCase(), arreglo)){
-			campo.classList.remove('d-none')
+			campo.classList.remove('d-none');
 		}else{
-			campo.classList.add('d-none')
+			campo.classList.add('d-none');
 		}
+	});
 
-
-		/* if(filtro.toLowerCase().includes(texto.toLowerCase())){
-			campo.classList.remove('d-none')
+	cards.forEach(function(card){
+		var desc = card.querySelector('.row > div:nth-child(3)')?.innerText || '';
+		if(contains(desc.toLowerCase(), arreglo)){
+			card.classList.remove('d-none');
 		}else{
-			campo.classList.add('d-none')
-		} */
-	})
+			card.classList.add('d-none');
+		}
+	});
 }
 function limbiarBusqueda(){
 	txtBuscarPlaca.value='';

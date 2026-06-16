@@ -79,7 +79,7 @@
 				<p>Contraseña</p>
 				<input type="text" class="form-control" id="txtPassPers">
 				<p>Nivel de acceso</p>
-				<select class="selectpicker" data-live-search="false" id="sltFiltroNiveles" title="&#xed12; Filtro de Niveles">
+				<select class="selectpicker" data-live-search="false" id="sltFiltroNiveles" title="Filtro de Niveles">
 					<option value="1">Administrador</option>
 					<option value="2">Colaborador</option>
 				</select>
