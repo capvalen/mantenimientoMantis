@@ -15,18 +15,18 @@ function reporteSoat($cadena){
 	$resultado = $cadena->query($sql); $i=1;
 	$hoy = new DateTime(date('Y-m-d'));
 	?>
-	<div class="table-responsive d-none d-md-block d-print-block">
+	<div class="table-responsive d-none d-md-block d-print-none">
 	<table class="table table-hover">
 		<thead class="text-center">
 				<th>N°</th>
 				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
 				<th>Año Fab.</th>
-				<th>SOAT</th>
-				<th>Alerta SOAT</th>
-				<th>R. Técnica</th>
-				<th>Alerta R. Técnica</th>
-				<th>Póliza RCT</th>
-				<th>Alerta Póliza RCT</th>
+				<th class="text-end">SOAT</th>
+				<th class="text-start">Alerta SOAT</th>
+				<th class="text-end">R. Técnica</th>
+				<th class="text-start">Alerta R. Técnica</th>
+				<th class="text-end">Póliza RCT</th>
+				<th class="text-start">Alerta Póliza RCT</th>
 				<th>@</th>
 		</thead>
 		<tbody>
@@ -60,26 +60,26 @@ function reporteSoat($cadena){
 				}
 			?>
 			<tr>
-				<td><?= $i;?></td>
-				<td class="tdPlaca" data-value="<?= $row['placSerie']?>"><?= $row['placSerie']?></td>
-				<td><?= $row['ano']?></td>
-				<td class="tdSoat text-right" data-value="<?= $row['vencimientoSoat']?>"><?= $row['vencimientoSoatLatam']?></td>
+				<td class="text-center"><?= $i;?></td>
+				<td class="tdPlaca text-center" data-value="<?= $row['placSerie']?>"><?= $row['placSerie']?></td>
+				<td class="text-center"><?= $row['ano']?></td>
+				<td class="tdSoat text-end" data-value="<?= $row['vencimientoSoat']?>"><?= $row['vencimientoSoatLatam']?></td>
 				<?php if( $row['vencimientoSoat']<>''): ?>
-					<td class="<?= $soatColor ?>"><?= $intervaloSoat > 0 ? 'Faltan '. abs($intervaloSoat) . ' días' : 'Vencido hace '. abs($intervaloSoat) . ' días' ?></td>
+					<td class="text-start <?= $soatColor ?>"><?= $intervaloSoat > 0 ? 'Faltan '. abs($intervaloSoat) . ' días' : 'Vencido hace '. abs($intervaloSoat) . ' días' ?></td>
 				<?php else: ?>
-					<td></td>
+					<td class="text-start"></td>
 				<?php endif; ?>
-				<td class="tdRT text-right" data-value="<?= $row['vencimientoRT']?>"><?= $row['vencimientoRTLatam']?></td>
+				<td class="tdRT text-end" data-value="<?= $row['vencimientoRT']?>"><?= $row['vencimientoRTLatam']?></td>
 				<?php if( $row['vencimientoRT']<>''): ?>
-					<td class="<?= $rtColor ?>"><?= $intervaloRT > 0 ? 'Faltan '. abs($intervaloRT) . ' días' : 'Vencido hace '. abs($intervaloRT) . ' días' ?></td>
+					<td class="text-start <?= $rtColor ?>"><?= $intervaloRT > 0 ? 'Faltan '. abs($intervaloRT) . ' días' : 'Vencido hace '. abs($intervaloRT) . ' días' ?></td>
 				<?php else: ?>
-					<td></td>
+					<td class="text-start"></td>
 				<?php endif; ?>
-				<td class="tdRCT text-right" data-value="<?= $row['vencimientoRCT']?>"><?= $row['vencimientoRCTLatam']?></td>
+				<td class="tdRCT text-end" data-value="<?= $row['vencimientoRCT']?>"><?= $row['vencimientoRCTLatam']?></td>
 				<?php if( $row['vencimientoRCT']<>''): ?>
-					<td class="<?= $rctColor ?>"><?= $intervaloRCT > 0 ? 'Faltan '. abs($intervaloRCT) . ' días' : 'Vencido hace '. abs($intervaloRCT) . ' días' ?></td>
+					<td class="text-start <?= $rctColor ?>"><?= $intervaloRCT > 0 ? 'Faltan '. abs($intervaloRCT) . ' días' : 'Vencido hace '. abs($intervaloRCT) . ' días' ?></td>
 				<?php else: ?>
-					<td></td>
+					<td class="text-start"></td>
 				<?php endif;
 				if($_COOKIE['ckPower']==1):
 				?>
@@ -92,7 +92,7 @@ function reporteSoat($cadena){
 		</tbody>
 	</table>
 	</div>
-	<div class="row d-md-none cards-container">
+	<div class="row d-md-none d-print-flex cards-container">
 		<?php
 		$i=1; $resultado = $cadena->query($sql);
 		while($row = $resultado->fetch_assoc()){
@@ -128,9 +128,9 @@ function reporteSoat($cadena){
 				<div class="card-body p-3">
 					<div class="d-flex justify-content-between align-items-start">
 						<h6 class="card-title mb-0 fw-bold"><?= $row['placSerie']?></h6>
-						<small class="text-muted"><?= $row['ano']?></small>
+						<div class="text-end"><small class="text-muted d-block">Año fab.</small><span class="text-dark"><?= $row['ano']?></span></div>
 					</div>
-					<hr class="my-2">
+					<hr class="my-2 d-print-none">
 					<div class="row g-1">
 						<div class="col-6">
 							<small class="text-secondary">SOAT:</small><br>
@@ -155,8 +155,8 @@ function reporteSoat($cadena){
 						</div>
 					</div>
 					<?php if($_COOKIE['ckPower']==1): ?>
-					<hr class="my-2">
-					<button class="btn btn-outline-secondary btn-sm w-100" onclick="editarSoat(<?= $i?>, <?= $row['idPlaca']?>)"><i class="bi bi-pencil-square"></i> Editar vencimientos</button>
+					<hr class="my-2 d-print-none">
+					<button class="btn btn-outline-secondary btn-sm w-100 d-print-none" onclick="editarSoat(<?= $i?>, <?= $row['idPlaca']?>)"><i class="bi bi-pencil-square"></i> Editar vencimientos</button>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -185,7 +185,7 @@ function reporteAceite($cadena){
 
 	$i=1;
 	?>
-	<div class="table-responsive d-none d-md-block d-print-block">
+	<div class="table-responsive d-none d-md-block d-print-none">
 	<table class="table table-hover">
 		<thead class="text-center">
 				<th>N°</th>
@@ -242,14 +242,14 @@ function reporteAceite($cadena){
 				<td class="tdActual" data-value="<?= $rowAceite['kilometraje'];?>" style="white-space:nowrap"><?= number_format($rowAceite['kilometraje']);?> <?= $rowAceite['queTipo'];?> </td>
 				<td style="white-space:nowrap"><?= number_format($rowAceite['rango']);?> <?= $rowAceite['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowAceite['queTipo'];?></td>
-				<td class="<?= $color==''? 'bg-success': '';?>" ><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></td>
+				<td class="text-light <?= $color==''? 'bg-success ': '';?>"><strong><?= number_format($restante) ?> <?= $rowAceite['queTipo'];?></strong></td>
 				<td><?= $rowAceite['porcentajeAviso'];?>%</td>
 				<td><?= number_format($aviso) ?></td>
 				<td style="white-space:nowrap"><?= $rowAceite['observacion'];?></td>
 				<td style="white-space:nowrap">
 				<?php if($_COOKIE['ckPower']==1): ?>
-					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarMantenimiento('actualizacion', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
-					<button class="btn btn-outline-success mx-1" onclick="abrirModalInsertarMantenimiento('mantenimiento', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Mantenimiento</button>
+					<button class="btn btn-primary mx-1 d-print-none" onclick="abrirModalInsertarMantenimiento('actualizacion', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
+					<button class="btn btn-success mx-1 d-print-none" onclick="abrirModalInsertarMantenimiento('mantenimiento', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Mantenimiento</button>
 					<?php endif; ?>
 				</td>
 			</tr>
@@ -259,7 +259,7 @@ function reporteAceite($cadena){
 		</tbody>
 	</table>
 	</div>
-	<div class="row d-md-none cards-container">
+	<div class="row d-md-none d-print-flex cards-container">
 		<?php
 		$resultadoAceite = $cadena->query($sqlAceite);
 		while($rowAceite = $resultadoAceite->fetch_assoc()){
@@ -290,7 +290,7 @@ function reporteAceite($cadena){
 						<h6 class="card-title mb-0 fw-bold"><?= $rowAceite['placSerie']?></h6>
 						<span class="badge <?= $estadoColor ?> text-light"><?= $estadoTxt ?></span>
 					</div>
-					<hr class="my-2">
+					<hr class="my-2 d-print-none">
 					<div class="row g-1">
 						<div class="col-6"><small class="text-secondary">Fecha Actualización:</small><br><?= $rowAceite['fActualizacionLatam']?></div>
 						<div class="col-6"><small class="text-secondary">Horómetro actual:</small><br><?= number_format($rowAceite['horometro'])?> <?= $rowAceite['queTipo']?></div>
@@ -305,10 +305,10 @@ function reporteAceite($cadena){
 						<?php endif; ?>
 					</div>
 					<?php if( isset($_COOKIE['ckPower']) && $_COOKIE['ckPower']==1): ?>
-					<hr class="my-2">
+					<hr class="my-2 d-print-none">
 					<div class="row g-1">
-						<div class="col-6"><button class="btn btn-outline-primary btn-sm w-100" onclick="abrirModalInsertarMantenimiento('actualizacion', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button></div>
-						<div class="col-6"><button class="btn btn-outline-success btn-sm w-100" onclick="abrirModalInsertarMantenimiento('mantenimiento', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Mantenimiento</button></div>
+						<div class="col-6"><button class="btn btn-outline-primary btn-sm w-100 d-print-none" onclick="abrirModalInsertarMantenimiento('actualizacion', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button></div>
+						<div class="col-6"><button class="btn btn-outline-success btn-sm w-100 d-print-none" onclick="abrirModalInsertarMantenimiento('mantenimiento', <?= $rowAceite['idPlaca']?>)"><i class="bi bi-plus"></i> Mantenimiento</button></div>
 					</div>
 				<?php endif; ?>
 				</div>
@@ -352,7 +352,7 @@ function reporteCaja($cadena, $esclavo){
 
 	$i=1;
 	?>
-	<div class="table-responsive d-none d-md-block d-print-block">
+	<div class="table-responsive d-none d-md-block d-print-none">
 	<table class="table table-hover">
 		<thead class="text-center">
 				<th>N°</th>
@@ -410,13 +410,13 @@ function reporteCaja($cadena, $esclavo){
 				<td ><?= number_format($rowCaja['horometroReciente']);?> <?= $rowCaja['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($rowCaja['rango2']);?> <?= $rowCaja['queTipo'];?></td>
 				<td style="white-space:nowrap"><?= number_format($proximo);?> <?= $rowCaja['queTipo'];?></td>
-				<td class="<?= $color==''? 'bg-success': '';?>" style="white-space:nowrap"><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></td>
+				<td class="text-light <?= $color==''? 'bg-success': '';?>" style="white-space:nowrap"><strong><?= number_format($restante) ?> <?= $rowCaja['queTipo'];?></strong></td>
 				<td ><?= $rowCaja['porcentajeAviso2'];?>%</td>
 				<td ><?= number_format($aviso);?></td>
 				<td style="white-space:nowrap"><?= $rowCaja['observacionReciente'];?></td>
 				<td style="white-space:nowrap">
 				<?php if($_COOKIE['ckPower']==1): ?>
-					<button class="btn btn-outline-primary mx-1" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
+					<button class="btn btn-primary mx-1 d-print-none" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
 				<?php endif; ?>
 				</td>
 			</tr>
@@ -426,7 +426,7 @@ function reporteCaja($cadena, $esclavo){
 		</tbody>
 	</table>
 	</div>
-	<div class="row d-md-none cards-container">
+	<div class="row d-md-none d-print-flex cards-container">
 		<?php
 		foreach( $resultados as $rowCaja ){
 			$fUltimaCaja =new DateTime($rowCaja['fechaReciente']);
@@ -458,7 +458,7 @@ function reporteCaja($cadena, $esclavo){
 						<h6 class="card-title mb-0 fw-bold"><?= $rowCaja['placSerie']?></h6>
 						<span class="badge <?= $estadoColor ?> text-light"><?= $estadoTxt ?></span>
 					</div>
-					<hr class="my-2">
+					<hr class="my-2 d-print-none">
 					<div class="row g-1">
 						<div class="col-6"><small class="text-secondary">Fecha Actualización:</small><br><?= $fAnterior->format('d/m/Y')?></div>
 						<div class="col-6"><small class="text-secondary">Horómetro actual:</small><br><?= number_format($rowCaja['horometroAnterior'])?> <?= $rowCaja['queTipo']?></div>
@@ -473,8 +473,8 @@ function reporteCaja($cadena, $esclavo){
 						<?php endif; ?>
 					</div>
 					<?php if($_COOKIE['ckPower']==1): ?>
-					<hr class="my-2">
-					<button class="btn btn-outline-primary btn-sm w-100" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
+					<hr class="my-2 d-print-none">
+					<button class="btn btn-outline-primary btn-sm w-100 d-print-none" onclick="abrirModalInsertarCaja(<?= $rowCaja['idPlaca']?>)"><i class="bi bi-plus"></i> Actualización</button>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -489,17 +489,17 @@ function reporteDocumentos($cadena, $esclavo){
 		FROM `placas` p where p.placActivo = 1
 		order by p.idPlaca asc;";
 	$resultado = $cadena->query($sql); $i=1;
-	$tiposDB = ['SOAT', 'Revisión', 'Póliza', 'Tarjeta'];
+	$tiposDB = ['Tarjeta' => 'TIVE', 'SOAT' => 'SOAT', 'Revisión' => 'Revisión técnica', 'Póliza' => 'Póliza'];
 	?>
-	<div class="table-responsive d-none d-md-block d-print-block">
+	<div class="table-responsive d-none d-md-block d-print-none">
 	<table class="table table-hover table-bordered">
 		<thead class="text-center">
 				<th>N°</th>
 				<th class="tdPlaca" data-value="-1">Vehículo - Placa</th>
+				<th>TIVE</th>
 				<th>SOAT</th>
 				<th>Revisión técnica</th>
 				<th>Póliza</th>
-				<th>Tarjeta de propiedad</th>
 		</thead>
 		<tbody>
 			<?php
@@ -525,7 +525,7 @@ function reporteDocumentos($cadena, $esclavo){
 			<tr>
 				<td><?= $i;?></td>
 				<td class="tdPlaca" data-value="<?= $row['placSerie']?>"><?= $row['placSerie']?></td>
-				<?php foreach($tiposDB as $tipo):
+				<?php foreach($tiposDB as $tipo => $label):
 					$ruta = $rowArch ? $rowArch[$tipo] : null;
 				?>
 					<td class="text-center td-documento">
@@ -555,10 +555,10 @@ function reporteDocumentos($cadena, $esclavo){
 		</tbody>
 	</table>
 	</div>
-	<div class="row d-md-none cards-container">
+	<div class="row d-md-none d-print-flex cards-container">
 		<?php
 		$resultado = $cadena->query($sql); $i=1;
-		$tiposLabel = ['SOAT'=>'SOAT', 'Revisión'=>'Revisión Técnica', 'Póliza'=>'Póliza', 'Tarjeta'=>'Tarjeta Propiedad'];
+		$tiposLabel = ['Tarjeta'=>'TIVE', 'SOAT'=>'SOAT', 'Revisión'=>'Revisión Técnica', 'Póliza'=>'Póliza'];
 		while($row = $resultado->fetch_assoc()){
 			$archivos = $esclavo->query("SELECT
 					idPlaca,
@@ -582,7 +582,7 @@ function reporteDocumentos($cadena, $esclavo){
 			<div class="card tarjeta-venc h-100" data-placa="<?= $row['placSerie']?>">
 				<div class="card-body p-3">
 					<h6 class="card-title fw-bold"><?= $row['placSerie']?></h6>
-					<hr class="my-2">
+					<hr class="my-2 d-print-none">
 					<div class="row g-1">
 						<?php
 						foreach($tiposLabel as $key=>$label):

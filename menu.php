@@ -1,7 +1,7 @@
 <?php $nomArchivo = basename($_SERVER["SCRIPT_FILENAME"]);?>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark ps-5">
-  <a class="navbar-brand" href="#">Control de mantenimientos </a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark ps-5 d-print-none">
+  <a class="navbar-brand d-print-none" href="#">Control de mantenimientos </a>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

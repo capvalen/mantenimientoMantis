@@ -32,25 +32,29 @@ if( !isset($_COOKIE['ckPower']) ) {
 .tarjeta-mant {border-radius:8px;border:1px solid #dee2e6;}
 .tarjeta-mant .text-secondary {font-size:.8rem;}
 .tarjeta-mant .row > div {word-break:break-word;}
+@media print {
+	div:has(> #logo) { flex: 0 0 25% !important; max-width: 25% !important; }
+	div:has(> #imgFoto) { flex: 0 0 15% !important; max-width: 15% !important; text-align: right !important; }
+}
 </style>
 <?php include 'menu.php';?>
 <div class="container-fluid">
 <section>
-	<div class="row py-2">
+	<div class="row py-2 d-flex justify-content-between">
 		<div class="order-0 order-md-0 col-6 col-md-3 text-center">
-			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
+			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" id="logo" class="img-fluid"></div>
 		<div class="order-2 order-md-1 col-12 col-md-6">
 			<h3 class="text-center ">Reporte de Mantenimiento Preventivo y Correctivo</h3>
-			<?php if(isset($_GET['placa'])){?> <h4 class="text-center pb-3">Placa: <?= $_GET['placa'];?></h4> 
+			<?php if(isset($_GET['placa'])){?> <h4 class="text-center text-primary pb-3">Placa: <?= $_GET['placa'];?></h4> 
 		</div>
 		<div class="order-1 order-md-2 col-6 col-md-2 text-center">
 			<img src="" id="imgFoto" class="img-fluid w-75" onclick="modalFoto()" style="cursor:pointer;">
 		</div>
 	</div>
-	<div class="row">
+	<div class="row d-print-none">
 		<div class="col-sm-4">
 				<?php if( $_COOKIE['ckPower']==1){ ?>
-				<button class="btn btn-outline-primary mb-3" onclick="abrirMantenimientoAutomatico()"><i class="bi bi-node-plus"></i>  Agregar mantenimiento</button>
+				<button class="btn btn-outline-primary mb-3 d-print-none" onclick="abrirMantenimientoAutomatico()"><i class="bi bi-node-plus"></i>  Agregar mantenimiento</button>
 				<?php } ?>
 			</div>
 			<div class="col-sm-8">
@@ -777,7 +781,7 @@ function renderFila(row, idx){
 	h += '<td style="white-space:nowrap">';
 	if(admin) h += '<span class="d-print-none"><button class="btn btn-outline-danger btn-sm border-0" onclick="borrarDescipcion('+row.idMantenimiento+')"><i class="bi bi-x"></i></button> <button class="btn btn-outline-primary btn-sm border-0" onclick="updateDescipcion('+row.idMantenimiento+','+row.idPlaca+','+idx+')"><i class="bi bi-pencil-square"></i></button></span> ';
 	h += (idx+1)+'</td>';
-	h += '<td class="tdFecha"><span>'+row.manFecha+'</span><span class="d-print-flex d-none">'+row.mantDescipcion+'</span></td>';
+	h += '<td class="tdFecha"><span>'+row.manFecha+'</span></td>';
 	h += '<td class="tdTipoMant d-print-none" data-id="'+row.idTipoMantenimiento+'">'+row.tipmDescripcion+'</td>';
 	h += '<td class="tdDescipcion">'+row.mantDescipcion+'</td>';
 	h += '<td class="tdKilo">'+row.mantKilometraje+'</td>';

@@ -25,7 +25,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 			<img src="https://contratistasjkm.com/portal/wp-content/uploads/2019/07/logo-transportes.png" class="img-fluid"></div>
 		<div class="order-2 order-md-1 col-12 col-md-6">
 			<h3 class="text-center ">Registro de fechas de vencimiento</h3>
-			<div class="input-group mb-3">
+			<div class="input-group mb-3 d-print-none">
 				<input type="text" class="form-control" placeholder="Buscar por placa" id="txtBuscarPlaca">
 				<button class="btn btn-outline-secondary" type="button" onclick="buscarPlaca()" ><i class="bi bi-search"></i></button>
 				<button class="btn btn-outline-secondary" type="button" onclick="limbiarBusqueda()" ><i class="bi bi-eraser"></i></button>
@@ -55,10 +55,10 @@ if( !isset($_COOKIE['ckPower']) ) {
 <section class="container-fluid">
 	<div class="tab-content" id="myTabContent">
 		<div class="tab-pane fade show active" id="soat" role="tabpanel" aria-labelledby="soat-tab">
-			<div class="resultado table-responsive"></div>
+			<div class="resultado"></div>
 		</div>
 		<div class="tab-pane fade" id="aceite" role="tabpanel" aria-labelledby="aceite-tab">
-			<div class="card my-3">
+			<div class="card my-3 d-print-none">
 				<div class="card-body">
 					<label for=""><i class="bi bi-funnel"></i> Filtros</label>
 					<button class="btn btn-sm btn-outline-success btnFiltros my-1" onclick="activarFiltro('operativo')">Operativo</button>
@@ -68,10 +68,10 @@ if( !isset($_COOKIE['ckPower']) ) {
 					<button class="btn btn-sm btn-outline-secondary btnFiltros my-1" onclick="activarFiltro('limpiar')" title="Limpiar filtro"><i class="bi bi-eraser"></i></button>
 				</div>
 			</div>
-			<div class="resultado table-responsive"></div>
+			<div class="resultado"></div>
 		</div>
 		<div class="tab-pane fade" id="caja" role="tabpanel" aria-labelledby="caja-tab">
-		<div class="card my-3">
+		<div class="card my-3 d-print-none">
 				<div class="card-body">
 					<label for=""><i class="bi bi-funnel"></i> Filtros</label>
 					<button class="btn btn-sm btn-outline-success btnFiltros" onclick="activarFiltroFiltro('operativo')">Operativo</button>
@@ -80,14 +80,14 @@ if( !isset($_COOKIE['ckPower']) ) {
 					<button class="btn btn-sm btn-outline-secondary btnFiltros" onclick="activarFiltroFiltro('limpiar')" title="Limpiar filtro"><i class="bi bi-eraser"></i></button>
 				</div>
 			</div>
-			<div class="resultado table-responsive">
+			<div class="resultado">
 				<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div> Cargando datos
 			</div>
 		</div>
 		<div class="tab-pane fade" id="documentos" role="tabpanel" aria-labelledby="caja-tab">
-			<div class="card my-3">
+			<div class="card my-3 d-print-none">
 				<div class="card-body">
-					<div class="resultado table-responsive"></div>
+					<div class="resultado"></div>
 				</div>
 			</div>
 		</div>
@@ -112,7 +112,7 @@ if( !isset($_COOKIE['ckPower']) ) {
 				<input type="date" class="form-control" id="txtRCT">
       </div>
       <div class="modal-footer border-0">
-        <button type="button" class="btn btn-primary" onclick="updateVencimiento()" data-bs-dismiss="modal">Actualizar vencimientos</button>
+        <button type="button" class="btn btn-primary d-print-none" onclick="updateVencimiento()" data-bs-dismiss="modal">Actualizar vencimientos</button>
       </div>
     </div>
   </div>
@@ -181,10 +181,10 @@ if( !isset($_COOKIE['ckPower']) ) {
       </div>
       <div class="modal-footer border-0">
 				<div class="grupoHoro">
-					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar actualización</button>
+					<button type="button" class="btn btn-outline-primary d-print-none" onclick="insertarMantenimientoHoro()"><i class="bi bi-save"></i> Insertar actualización</button>
 				</div>
 				<div class="grupoActual">
-					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoActual()"><i class="bi bi-save"></i> Insertar mantenimiento</button>
+					<button type="button" class="btn btn-outline-primary d-print-none" onclick="insertarMantenimientoActual()"><i class="bi bi-save"></i> Insertar mantenimiento</button>
 				</div>
       </div>
     </div>
@@ -232,7 +232,7 @@ if( !isset($_COOKIE['ckPower']) ) {
       </div>
       <div class="modal-footer border-0">
 				<div class="">
-					<button type="button" class="btn btn-outline-primary" onclick="insertarMantenimientoCaja()"><i class="bi bi-save"></i> Insertar actualización</button>
+					<button type="button" class="btn btn-outline-primary d-print-none" onclick="insertarMantenimientoCaja()"><i class="bi bi-save"></i> Insertar actualización</button>
 				</div>
       </div>
     </div>
@@ -260,7 +260,7 @@ if ($.fn && !$.fn.modal) {
 <script>
 	var idPlaca=-1, queTipo='';
 	$(document).ready(function() {
-		$('.selectpicker').selectpicker('render');
+		$('.selectpicker').selectpicker();
 		
 		$('#txtFechaHoroEdit').val( moment().format('YYYY-MM-DD') );
 		cambiarPlantilla('soat');
@@ -342,14 +342,11 @@ if ($.fn && !$.fn.modal) {
 
 		if(placasAlertas.length>0){
 			const alertDiv = document.createElement("div");
-      alertDiv.className = "alert alert-dismissible fade show mt-2";
+      alertDiv.className = "alert alert-warning alert-dismissible fade show mt-2";
       alertDiv.id = "divAlert";
       alertDiv.setAttribute("role", "alert");
-      alertDiv.style.backgroundColor = "rgb(255,193,7)";
-      alertDiv.style.color = "#fff";
-      alertDiv.style.border = "none";
       alertDiv.innerHTML = `			
-        <i class="bi bi-exclamation-triangle-fill"></i> <strong>¡Alerta!</strong> Existen placas (${placasAlertas.length}) por vencer: ${placasAlertas.join(',')}` ;
+        <i class="bi bi-exclamation-triangle-fill"></i> <strong>¡Alerta!</strong> Existen placas (${placasAlertas.length}) por vencer: ${placasAlertas.join(', ')}` ;
       const caja = document.getElementById(tipo);
       if (caja) {
         caja.insertBefore(alertDiv, caja.firstChild);
@@ -357,14 +354,11 @@ if ($.fn && !$.fn.modal) {
 		}
 		if(placasVencidas.length>0){
 			const alertDivVencida = document.createElement("div");
-      alertDivVencida.className = "alert alert-dismissible fade show mt-2";
+      alertDivVencida.className = "alert alert-danger alert-dismissible fade show mt-2";
       alertDivVencida.id = "divAlertVencida";
       alertDivVencida.setAttribute("role", "alert");
-      alertDivVencida.style.backgroundColor = "rgb(246,15,15)";
-      alertDivVencida.style.color = "#fff";
-      alertDivVencida.style.border = "none";
       alertDivVencida.innerHTML = `			
-        <i class="bi bi-x-octagon-fill"></i> <strong>¡Alerta!</strong> Urgente placas (${placasVencidas.length}) vencidas: ${placasVencidas.join(',')}` ;
+        <i class="bi bi-x-octagon-fill"></i> <strong>¡Alerta!</strong> Urgente placas (${placasVencidas.length}) vencidas: ${placasVencidas.join(', ')}` ;
       const cajaVencida = document.getElementById(tipo);
       if (cajaVencida) {
         cajaVencida.insertBefore(alertDivVencida, cajaVencida.firstChild);
@@ -410,8 +404,12 @@ if ($.fn && !$.fn.modal) {
 			$('.grupoHoro').addClass('d-none')
 			$('.grupoActual').removeClass('d-none')
 		}
-$('#sltPlacaHoroEdit').val(idPlaca).selectpicker('refresh')
-		$('#sltTipo1').val(1).selectpicker('refresh')
+		$('#sltPlacaHoroEdit').selectpicker('val',idPlaca.toString() )
+		$('#sltTipo1').selectpicker('val','1')
+		
+		//$('#sltPlacaHoroEdit').val(idPlaca).selectpicker('refresh')
+		// //		$('#sltTipo1').parent().find('.dropdown-menu').remove()
+		//$('#sltTipo1').val(1).selectpicker('refresh')
 		cambiarValores()
 		$('#modalInsertarHodometro').modal('show')
 	}
@@ -421,7 +419,7 @@ $('#sltPlacaHoroEdit').val(idPlaca).selectpicker('refresh')
 		}
 	});
 	function abrirModalInsertarCaja(idPlaca){
-		$('#sltPlacCaja').val(idPlaca).selectpicker('refresh')
+		$('#sltPlacCaja').val(idPlaca)
 		$('#txtFechaCaja').val(moment().format("YYYY-MM-DD"))
 		$('#modalInsertarCaja').modal('show')
 	}
@@ -732,8 +730,6 @@ txtObservacionCaja */
     border-radius: .25rem;
 }
 .bg-dark{background-color:#0e0e0e!important}
-.bg-success{background-color:rgb(16,199,114)!important;color:#132900!important}
-.bg-danger{background-color:rgb(246,15,15)!important;color:#fff!important}
 .bootstrap-select .dropdown-toggle .filter-option{
 	border: transparent!important;	
 }
@@ -745,10 +741,23 @@ txtObservacionCaja */
 .btn-upload .spinner-border{width:1rem;height:1rem;}
 .tarjeta-venc .text-secondary {font-size:.8rem;}
 .tarjeta-venc .row > div {word-break:break-word;}
-.tarjeta-venc.border-danger {border-color:#dc3545!important;border-width:2px!important;}
-.tarjeta-venc.border-warning {border-color:#ffc107!important;border-width:2px!important;}
+.tarjeta-venc.border-danger,.alert-danger {border-color:#dc3545!important;border-width:2px!important;}
+.tarjeta-venc.border-warning,.alert-warning {border-color:#ffc107!important;border-width:2px!important;}
 .card-body .badge {font-size:.75rem;}
-.gap-2 {gap:.5rem!important;}
+@media print {
+  .tarjeta-venc { break-inside: avoid; }
+  .cards-container { break-before: avoid; }
+  .badge.bg-success { background-color: transparent !important; color: #198754 !important; }
+  .badge.bg-warning { background-color: transparent !important; color: #664d03 !important; }
+  .badge.bg-danger { background-color: transparent !important; color: #dc3545 !important; }
+  .alert-danger { background-color: transparent !important; color: #dc3545 !important; border-width:1px!important; }
+  .alert-warning { background-color: transparent !important; color: #664d03 !important; border-width:1px!important; }
+}
+tr.bg-danger td,
+tr.bg-warning td{
+  background-color: inherit !important;
+	color:white;
+}
 .lds-ellipsis {
   display: inline-block;
   position: relative;
