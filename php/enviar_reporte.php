@@ -22,7 +22,7 @@ $emailBcc  = 'infocat.soluciones@gmail.com';                                // c
 $smtpHost = 'mail.contratistasjkm.com';
 $smtpPort = 465;
 $smtpUser = 'automatico@contratistasjkm.com';
-$smtpPass = '<Contratistas2026.>';  // coloca aquí la contraseña
+$smtpPass = '';  // coloca aquí la contraseña
 // ===================================================================
 
 date_default_timezone_set('America/Lima');
