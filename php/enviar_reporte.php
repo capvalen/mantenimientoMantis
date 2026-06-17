@@ -9,14 +9,23 @@
  *   - Solo JSON: agregar ?action=json
  */
 
-// ========================== CONFIGURACIÓN SMTP ==========================
-$smtpHost   = 'mail.contratistasjkm.com';         // ej: smtp.gmail.com
-$smtpPort   = 465;        // 587 (TLS) o 465 (SSL)
-$smtpUser   = 'automatico@contratistasjkm.com';         // usuario@dominio.com
-$smtpPass   = '';         // contraseña o app password
-$emailFrom  = 'automatico@contratistasjkm.com';         // remitente
-$emailTo    = 'infocat.servicios@gmail.com';         // destinatario
-// ========================================================================
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+// ========================== CONFIGURACIÓN ==========================
+$emailFrom = 'automatico@contratistasjkm.com';  // remitente
+$emailTo   = 'rquispe@contratistasjkm.com';     // destinatario
+$emailBcc  = 'infocat.soluciones@gmail.com';                                // copia oculta (opcional)
+// --- SMTP (servidor de correo) ---
+$smtpHost = 'mail.contratistasjkm.com';
+$smtpPort = 465;
+$smtpUser = 'automatico@contratistasjkm.com';
+$smtpPass = '<Contratistas2026.>';  // coloca aquí la contraseña
+// ===================================================================
+
+date_default_timezone_set('America/Lima');
 
 include __DIR__ . '/conexion.php';
 
@@ -116,60 +125,28 @@ function obtenerAlertasCaja($esclavo) {
 	return ['warning' => $warning, 'danger' => $danger];
 }
 
-function enviarEmailSMTP($to, $subject, $htmlBody, $host, $port, $user, $pass, $from) {
-	$crlf = "\r\n";
-	$socket = @stream_socket_client(
-		($port == 465 ? 'ssl://' : 'tcp://') . $host . ':' . $port,
-		$errno, $errstr, 30
-	);
-	if (!$socket) return "Error conexión: $errstr ($errno)";
-
-	// Saludo del servidor
-	$r = fgets($socket, 512);
-
-	// EHLO
-	fputs($socket, "EHLO " . ($_SERVER['SERVER_NAME'] ?? 'localhost') . "$crlf");
-	while ($line = fgets($socket, 512)) {
-		if (substr($line, 3, 1) == ' ') break;
+function enviarEmail($to, $subject, $htmlBody, $from, $smtpHost, $smtpPort, $smtpUser, $smtpPass, $bcc = '') {
+	$mail = new PHPMailer(true);
+	try {
+		$mail->isSMTP();
+		$mail->Host       = $smtpHost;
+		$mail->SMTPAuth   = true;
+		$mail->Username   = $smtpUser;
+		$mail->Password   = $smtpPass;
+		$mail->SMTPSecure = $smtpPort == 465 ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
+		$mail->Port       = $smtpPort;
+		$mail->CharSet    = 'UTF-8';
+		$mail->setFrom($from);
+		$mail->addAddress($to);
+		if ($bcc) $mail->addBCC($bcc);
+		$mail->isHTML(true);
+		$mail->Subject = $subject;
+		$mail->Body    = $htmlBody;
+		$mail->send();
+		return true;
+	} catch (Exception $e) {
+		return $mail->ErrorInfo;
 	}
-
-	// AUTH LOGIN paso a paso verificando cada respuesta
-	fputs($socket, "AUTH LOGIN$crlf");
-	$r = fgets($socket, 512);
-	if (substr($r, 0, 3) != '334') return "Error AUTH LOGIN: $r";
-
-	fputs($socket, base64_encode($user) . "$crlf");
-	$r = fgets($socket, 512);
-	if (substr($r, 0, 3) != '334') return "Error username: $r";
-
-	fputs($socket, base64_encode($pass) . "$crlf");
-	$r = fgets($socket, 512);
-	if (substr($r, 0, 3) != '235') return "Error autenticación ($r)";
-
-	// MAIL FROM / RCPT TO / DATA
-	fputs($socket, "MAIL FROM: <$from>$crlf");
-	$r = fgets($socket, 512);
-	if (substr($r, 0, 3) != '250') return "Error MAIL FROM: $r";
-
-	fputs($socket, "RCPT TO: <$to>$crlf");
-	$r = fgets($socket, 512);
-	if (substr($r, 0, 3) != '250') return "Error RCPT TO: $r";
-
-	fputs($socket, "DATA$crlf");
-	$r = fgets($socket, 512);
-	if (substr($r, 0, 3) != '354') return "Error DATA: $r";
-
-	$headers = "From: $from{$crlf}Reply-To: $from{$crlf}";
-	$headers .= "MIME-Version: 1.0{$crlf}";
-	$headers .= "Content-Type: text/html; charset=utf-8{$crlf}";
-
-	fputs($socket, "Subject: $subject$crlf$headers$crlf$htmlBody$crlf.$crlf");
-	$r = fgets($socket, 512);
-	if (substr($r, 0, 3) != '250') return "Error envío: $r";
-
-	fputs($socket, "QUIT$crlf");
-	fclose($socket);
-	return true;
 }
 
 // ======================== MAIN ========================
@@ -222,15 +199,15 @@ if (isset($_GET['action']) && $_GET['action'] === 'json') {
 	exit;
 }
 
-// Sin configuración SMTP → mostrar HTML en navegador
-if (empty($smtpHost) || empty($emailTo)) {
+// Sin destinatario → mostrar HTML en navegador
+if (empty($emailTo)) {
 	echo $html;
 	exit;
 }
 
-// Enviar correo
-$res = enviarEmailSMTP($emailTo, 'Reporte de Alertas - Mantenimiento', $html,
-	$smtpHost, $smtpPort, $smtpUser, $smtpPass, $emailFrom);
+// Enviar correo con PHPMailer
+$res = enviarEmail($emailTo, 'Reporte de Alertas - Mantenimiento', $html, $emailFrom,
+	$smtpHost, $smtpPort, $smtpUser, $smtpPass, $emailBcc);
 
 if ($res === true) {
 	if (PHP_SAPI === 'cli') echo "Email enviado correctamente\n";
