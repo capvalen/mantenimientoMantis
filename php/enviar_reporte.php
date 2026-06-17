@@ -136,7 +136,7 @@ function enviarEmail($to, $subject, $htmlBody, $from, $smtpHost, $smtpPort, $smt
 		$mail->SMTPSecure = $smtpPort == 465 ? PHPMailer::ENCRYPTION_SMTPS : PHPMailer::ENCRYPTION_STARTTLS;
 		$mail->Port       = $smtpPort;
 		$mail->CharSet    = 'UTF-8';
-		$mail->setFrom($from);
+		$mail->setFrom($from, 'Contratistas JKM');
 		$mail->addAddress($to);
 		if ($bcc) $mail->addBCC($bcc);
 		$mail->isHTML(true);
@@ -206,7 +206,9 @@ if (empty($emailTo)) {
 }
 
 // Enviar correo con PHPMailer
-$res = enviarEmail($emailTo, 'Reporte de Alertas - Mantenimiento', $html, $emailFrom,
+$meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+$subject = 'Reporte de mantenimiento ' . $meses[(int)date('n')] . ' ' . date('j');
+$res = enviarEmail($emailTo, $subject, $html, $emailFrom,
 	$smtpHost, $smtpPort, $smtpUser, $smtpPass, $emailBcc);
 
 if ($res === true) {
